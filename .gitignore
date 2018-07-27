@@ -1,0 +1,17 @@
+#pycharm config
+.idea/
+
+#vscode config
+.vscode/
+
+# virtualenv
+venv/
+
+#other python
+pip-selfcheck.json
+
+#compiled python
+*.pyc
+
+#temp files
+~*
