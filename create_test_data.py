@@ -62,7 +62,8 @@ def setup_logger():
 
     # formatter for use by all handlers
     d = ","   # log column delimiter
-    log_msg_format_str = '%(asctime)s' + d + '%(levelname)s' + d + '"%(message)s"'
+    log_msg_format_str = '%(asctime)s' + d + '%(levelname)s' + d +\
+                         '"%(message)s"'
     datetime_fmt_str  = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(log_msg_format_str,datetime_fmt_str)
 
@@ -130,14 +131,14 @@ def create_crs_fcs():
     geometry_type = "POINT"
 
     # dict of FC names and WKIDs
-    crs_FCs = {"GDA94_point": 4283,
+    crs_fcs = {"GDA94_point": 4283,
                "WGS84_point": 4326,
                "Web_Mercator_point": 3857,
                "MGAZ56_point": 28356,
                "GDA94_GA_Lambert_point": 3112}
 
     # create FCs with a CRS
-    for name,wkid in crs_FCs.iteritems():
+    for name,wkid in crs_fcs.iteritems():
         log.info("Creating FC " + name + " with CRS " + str(wkid))
         sr = arcpy.SpatialReference(wkid)
         arcpy.CreateFeatureclass_management(out_path=out_path,
@@ -157,6 +158,49 @@ def create_crs_fcs():
                                         has_m='DISABLED',
                                         has_z='DISABLED')
 
+# -----------------------------------------
+# create_spatial_type_fcs
+# -----------------------------------------
+
+
+def create_geometry_type_fcs():
+    """create a set of feature classes in the test gdb with the set of
+       geometry types:
+           POINT
+           MULTIPATCH
+           MULTIPOINT
+           POLYGON
+           POLYLINE
+       pre: fgdb_name = "fc_profiler_test.gdb"
+       pre: fgdb_name exists in install_folder
+
+       assumes "GDA94_point" already exists
+    """
+
+    fgdb_name = "fc_profiler_test.gdb"
+    out_path = os.path.join(install_folder, fgdb_name)
+    wkid = 4283 # GDA94 lat/long
+    sr = arcpy.SpatialReference(wkid)
+
+    # dict of FC names and geometry_types
+    geometry_type_fcs = {"GDA94_multipatch": "MULTIPATCH",
+                          "GDA94_multipoint": "MULTIPOINT",
+                          "GDA94_polygon": "POLYGON",
+                          "GDA94_polyline": "POLYLINE"}
+
+    # create FCs with a CRS
+    for name,geometry_type in geometry_type_fcs.iteritems():
+        log.info("Creating FC " + name +
+                 " with geometery type " + geometry_type +
+                 " and CRS " + str(wkid))
+
+        arcpy.CreateFeatureclass_management(out_path=out_path,
+                                            out_name=name,
+                                            geometry_type=geometry_type,
+                                            has_m='DISABLED',
+                                            has_z='DISABLED',
+                                            spatial_reference=sr)
+
 
 # -----------------------------------------
 # main
@@ -171,6 +215,9 @@ def main():
 
     log.info("Creating CRS test feature classes")
     create_crs_fcs()
+
+    log.info("Creating spatial Type test feature classes")
+    create_geometry_type_fcs()
 
     log.info("Finished")
     end_time = datetime.datetime.now()
