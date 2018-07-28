@@ -15,3 +15,6 @@ pip-selfcheck.json
 
 #temp files
 ~*
+
+#log files
+*.log.csv
