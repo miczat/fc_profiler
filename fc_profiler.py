@@ -48,8 +48,8 @@ log = logging.getLogger()
 program_name = r"fc_profile"
 log_folder = r"."
 # fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
-# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
-fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
+# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
+fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
 overwrite = True  # overwrite the existing output files?
 
 
@@ -85,10 +85,6 @@ def setup_logger():
     log.addHandler(ch)
 
 
-
-
-
-
 # -----------------------------------------
 # main
 # -----------------------------------------
@@ -100,8 +96,8 @@ def main():
 
     log.info(fc_properties.get_crs_name(fc_path))
     log.info(fc_properties.get_crs_wkid(fc_path))
+    log.info(fc_properties.get_crs_type(fc_path))
     log.info(fc_properties.get_crs_units(fc_path))
-
 
     log.info("Finished")
     end_time = datetime.datetime.now()
