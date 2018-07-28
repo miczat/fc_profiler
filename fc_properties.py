@@ -18,6 +18,5 @@ def get_crs_wkid(fc_path):
     return sr.factoryCode
 
 def get_crs_units(fc_path):
-
     return "buz"
 
