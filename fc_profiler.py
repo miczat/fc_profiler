@@ -60,7 +60,8 @@ overwrite = True  # overwrite the existing output files?
 def setup_logger():
     logfile_ext = ".log.csv"
     logfile = os.path.join(log_folder, program_name + logfile_ext)
-    log.setLevel(logging.DEBUG)
+    # log.setLevel(logging.DEBUG)
+    log.setLevel(logging.INFO)
 
     # formatter for use by all handlers
     d = ","   # log column delimiter
@@ -95,10 +96,11 @@ def main():
     """main"""
     log.info("Start")
 
-    log.info(fc_properties.get_crs_name(fc_path))
-    log.info(fc_properties.get_crs_wkid(fc_path))
-    log.info(fc_properties.get_crs_type(fc_path))
-    log.info(fc_properties.get_crs_units(fc_path))
+    log.info("fc_name   = " + str(fc_properties.get_fc_name(fc_path)))
+    log.info("crs_name  = " + str(fc_properties.get_crs_name(fc_path)))
+    log.info("crs_wkid  = " + str(fc_properties.get_crs_wkid(fc_path)))
+    log.info("crs_type  = " + str(fc_properties.get_crs_type(fc_path)))
+    log.info("crs_units = " + str(fc_properties.get_crs_units(fc_path)))
 
     log.info("Finished")
     end_time = datetime.datetime.now()

@@ -4,6 +4,17 @@ log = logging.getLogger()
 
 
 # -----------------------------------------
+# get name
+# -----------------------------------------
+
+def get_fc_name(fc_path):
+    base_name = arcpy.Describe(fc_path).baseName
+    log.debug("get_crs_name returning: " + base_name)
+    return base_name
+
+
+
+# -----------------------------------------
 # get CRS functions
 # -----------------------------------------
 
