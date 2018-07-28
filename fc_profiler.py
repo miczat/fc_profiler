@@ -97,6 +97,7 @@ def main():
     log.info("Start")
 
     log.info("fc_name   = " + str(fc_properties.get_fc_name(fc_path)))
+    log.info("fc_type   = " + str(fc_properties.get_fc_geometry_type(fc_path)))
     log.info("crs_name  = " + str(fc_properties.get_crs_name(fc_path)))
     log.info("crs_wkid  = " + str(fc_properties.get_crs_wkid(fc_path)))
     log.info("crs_type  = " + str(fc_properties.get_crs_type(fc_path)))

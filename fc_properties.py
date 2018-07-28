@@ -13,6 +13,15 @@ def get_fc_name(fc_path):
     return base_name
 
 
+# -----------------------------------------
+# get geometry type
+# -----------------------------------------
+
+def get_fc_geometry_type(fc_path):
+    geometry_type = arcpy.Describe(fc_path).shapeType
+    log.debug("get_fc_geometry_type returning: " + geometry_type)
+    return geometry_type
+
 
 # -----------------------------------------
 # get CRS functions
