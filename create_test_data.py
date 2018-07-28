@@ -20,7 +20,7 @@
 # post:        a set of file geodatabases are creates
 #
 # Run instructions:
-#     -
+#     configure run config (globals)
 #     -
 #     -
 #
@@ -83,8 +83,9 @@ def setup_logger():
     ch.setFormatter(formatter)
     log.addHandler(ch)
 
+
 # -----------------------------------------
-# create file geodatabase(s)
+# create test file geodatabase
 # -----------------------------------------
 
 
@@ -95,6 +96,7 @@ def create_fgdb_test():
 
     if os.path.exists(fgdb_path) and overwrite is True:
         try:
+            log.info("Removing GDB " + fgdb_path)
             shutil.rmtree(fgdb_path)
         except WindowsError as e:
             log.error("WindowsError: could not delete folder")
@@ -102,6 +104,7 @@ def create_fgdb_test():
             raise
 
     try:
+        log.info("creating GDB " + fgdb_name)
         arcpy.CreateFileGDB_management (out_folder_path=install_folder,
                                         out_name=fgdb_name,
                                         out_version="CURRENT")
@@ -112,20 +115,66 @@ def create_fgdb_test():
 
 
 # -----------------------------------------
+# create_crs_fcs
+# -----------------------------------------
+
+
+def create_crs_fcs():
+    """create a set of point feature classes in the test gdb
+       pre: fgdb_name = "fc_profiler_test.gdb"
+       pre: fgdb_name exists in install_folder
+    """
+
+    fgdb_name = "fc_profiler_test.gdb"
+    out_path = os.path.join(install_folder, fgdb_name)
+    geometry_type = "POINT"
+
+    # dict of FC names and WKIDs
+    crs_FCs = {"GDA94_point": 4283,
+               "WGS84_point": 4326,
+               "Web_Mercator_point": 3857,
+               "MGAZ56_point": 28356,
+               "GDA94_GA_Lambert_point": 3112}
+
+    # create FCs with a CRS
+    for name,wkid in crs_FCs.iteritems():
+        log.info("Creating FC " + name + " with CRS " + str(wkid))
+        sr = arcpy.SpatialReference(wkid)
+        arcpy.CreateFeatureclass_management(out_path=out_path,
+                                            out_name=name,
+                                            geometry_type=geometry_type,
+                                            has_m='DISABLED',
+                                            has_z='DISABLED',
+                                            spatial_reference=sr)
+
+    # create one FC without a CRS
+
+    name = "NO_CRS_point"
+    log.info("Creating FC " + name + " with NO CRS ")
+    arcpy.CreateFeatureclass_management(out_path=out_path,
+                                        out_name=name,
+                                        geometry_type=geometry_type,
+                                        has_m='DISABLED',
+                                        has_z='DISABLED')
+
+
+# -----------------------------------------
 # main
 # -----------------------------------------
 
 def main():
     """main"""
+    log.info("Start")
 
-    log.info('Start')
+    log.info("Creating file geodatabase fc_profiler_test.gdb")
+    create_fgdb_test()
+
+    log.info("Creating CRS test feature classes")
+    create_crs_fcs()
+
+    log.info("Finished")
     end_time = datetime.datetime.now()
     duration = end_time - start_time
-
-    create_fgdb_test()
-    #create_fc_GDA_LL_point()
-
-    log.info('Finished')
     log.info("Duration " + str(duration))
 
 
