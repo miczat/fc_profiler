@@ -13,8 +13,9 @@ def get_crs_name(fc_path):
     return sr.name
 
 def get_crs_wkid(fc_path):
-
-    return "fiz"
+    sr = arcpy.Describe(fc_path).spatialReference
+    log.debug("get_crs_wkid returning: " + str(sr.factoryCode))
+    return sr.factoryCode
 
 def get_crs_units(fc_path):
 

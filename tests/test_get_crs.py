@@ -3,6 +3,7 @@ from fc_properties import get_crs_name
 from fc_properties import get_crs_wkid
 import os
 
+# self.assertEqual( <expected>, <actual>)
 
 class TestGet_crs_name(TestCase):
 
@@ -51,7 +52,7 @@ class TestGet_crs_wkid(TestCase):
     def test_get_crs_wkid_GDA94_GA_Lambert(self):
         fc = "GDA94_GA_Lambert_point"
         fc_path = os.path.join(self.fgdb, fc)
-        self.assertEqual(get_crs_wkid(fc_path), 3112)
+        self.assertEqual(3112, get_crs_wkid(fc_path))
 
     def test_get_crs_wkid_GDA94_LL(self):
         fc = "GDA94_point"
@@ -66,7 +67,7 @@ class TestGet_crs_wkid(TestCase):
     def test_get_crs_wkid_WGS_1984_Web_Mercator(self):
         fc = "Web_Mercator_point"
         fc_path = os.path.join(self.fgdb, fc)
-        self.assertEqual(get_crs_wkid(fc_path),3857)
+        self.assertEqual(get_crs_wkid(fc_path), 3857)
 
     def test_get_crs_wkid_MGAZ56(self):
         fc = "MGAZ56_point"
