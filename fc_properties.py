@@ -26,5 +26,12 @@ def get_crs_type(fc_path):
 
 
 def get_crs_units(fc_path):
-    return "buz"
-
+    sr = arcpy.Describe(fc_path).spatialReference
+    if sr.type == "Projected":
+        units = sr.linearUnitName
+    elif sr.type == "Geographic":
+        units = sr.angularUnitName
+    else:
+        units = "Unknown"
+    log.debug("get_crs_units returning: " + str(units))
+    return units
