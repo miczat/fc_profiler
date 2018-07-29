@@ -53,11 +53,11 @@ program_name = r"fc_profile"
 log_folder = r"."
 #fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
 #fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
-#fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
+fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
 #fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
-fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
+#fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
 overwrite = True  # overwrite the existing output files?
-
+xls_folder = r"c:\tmp\fc_profiler_testdata"
 
 # -----------------------------------------
 # create and configure the logger
@@ -65,8 +65,9 @@ overwrite = True  # overwrite the existing output files?
 def setup_logger():
     logfile_ext = ".log.csv"
     logfile = os.path.join(log_folder, program_name + logfile_ext)
-    # log.setLevel(logging.DEBUG)
-    log.setLevel(logging.INFO)
+    # log.setLevel(logging.INFO)
+    log.setLevel(logging.DEBUG)
+
 
     # formatter for use by all handlers
     d = ","   # log column delimiter
@@ -92,45 +93,39 @@ def setup_logger():
     log.addHandler(ch)
 
 
+
 # -----------------------------------------
 # main
 # -----------------------------------------
-
 
 def main():
     """main"""
     log.info("Start")
 
+    # check that the input GDB exists
     fc_gdb_path = fc_properties.get_fc_gdb_path(fc_path)
     if not os.path.isdir(fc_gdb_path):
         log.warning("Input feature class fGDB does not exist. Stopping.")
         sys.exit(1)
 
+    # generate the list of feature class properties
+    fc_properties_list = [("Feature Class", fc_properties.get_fc_name(fc_path)),
+                          ("Parent fGDB", fc_properties.get_fc_gdb_path(fc_path)),
+                          ("Geometry Type", fc_properties.get_fc_geometry_type(fc_path)),
+                          ("CRS Name", fc_properties.get_crs_name(fc_path)),
+                          ("CRS EPSG WKID", fc_properties.get_crs_wkid(fc_path)),
+                          ("CRS Type", fc_properties.get_crs_type(fc_path)),
+                          ("CRS Units", fc_properties.get_crs_units(fc_path))]
 
-    log.info("gdb_path  = " + str(fc_properties.get_fc_gdb_path(fc_path)))
-    log.info("fc_name   = " + str(fc_properties.get_fc_name(fc_path)))
-    log.info("fc_type   = " + str(fc_properties.get_fc_geometry_type(fc_path)))
-    log.info("crs_name  = " + str(fc_properties.get_crs_name(fc_path)))
-    log.info("crs_wkid  = " + str(fc_properties.get_crs_wkid(fc_path)))
-    log.info("crs_type  = " + str(fc_properties.get_crs_type(fc_path)))
-    log.info("crs_units = " + str(fc_properties.get_crs_units(fc_path)))
+    if logging.getLevelName(log.getEffectiveLevel()) == "INFO":
+        log.info("FC Properties List:")
+        for item in fc_properties_list:
+            log.info("{:18}: {}".format(item[0],item[1]))
 
+    # write the list of feature class properties to Excel
+    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path))
+    #TOOD write_fc_properties_to_xls(fc_properties_list, xls_path)
 
-    # }
-    #
-    # Input
-    # FC
-    # name
-    # Input
-    # FC
-    # path
-    #
-    # CRS
-    # name
-    # factory
-    # code
-    # type
-    # units
 
     log.info("Finished")
     end_time = datetime.datetime.now()
