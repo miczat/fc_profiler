@@ -103,6 +103,10 @@ def create_fgdb_test():
             log.error("WindowsError: could not delete folder")
             log.error(str(e).replace("\n", "; "))
             raise
+        except Exception as e:
+            log.error("Some other error")
+            log.error(str(e).replace("\n", "; "))
+            raise
 
     try:
         log.info("creating GDB " + fgdb_name)
@@ -111,6 +115,10 @@ def create_fgdb_test():
                                         out_version="CURRENT")
     except arcpy.ExecuteError as e:
         log.error("ExecuteError - folder exists")
+        log.error(str(e).replace("\n", "; "))
+        raise
+    except Exception as e:
+        log.error("Some other error")
         log.error(str(e).replace("\n", "; "))
         raise
 

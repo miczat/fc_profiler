@@ -41,10 +41,10 @@ import logging
 import os
 import sys
 import datetime
-
 import xlwt
 
 import fc_properties
+import xls_output
 
 start_time = datetime.datetime.now()
 log = logging.getLogger()
@@ -61,6 +61,7 @@ fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
 # fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
 overwrite = True  # overwrite the existing output files?
 xls_folder = r"C:\tmp\fc_profiler_testdata"
+overwrite = True  # overwrite the output xls if it exists?
 
 # -----------------------------------------
 # create and configure the logger
@@ -96,15 +97,6 @@ def setup_logger():
     log.addHandler(ch)
 
 
-# -----------------------------------------
-# Write to excel
-# -----------------------------------------
-
-def write_fc_properties_to_xls(fc_properties_list,xls_path):
-    """"writes the simple feature class properties to a page in an XLS"""
-    book = xlwt.Workbook()
-    sheet1 = book.add_sheet("fc_properties")
-    book.save(xls_path)
 
 
 # -----------------------------------------
@@ -121,6 +113,27 @@ def main():
         log.warning("Input feature class fGDB does not exist. Stopping.")
         sys.exit(1)
 
+    # check that the output XLS folder can be written to.
+    # Better to know now than after 10 minutes of profiling
+    if not os.access(xls_folder, os.W_OK):
+        log.warning("No write access to the output folder. Stopping.")
+        sys.exit(1)
+
+    # if the output file exists
+    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
+    if os.path.exists(xls_path) and overwrite is True:
+        try:
+            log.info("Removing XLS " + xls_path)
+            os.remove(xls_path)
+        except WindowsError as e:
+            log.error("WindowsError: could not delete file")
+            log.error(str(e).replace("\n", "; "))
+            raise
+        except Exception as e:
+            log.error("Some other error")
+            log.error(str(e).replace("\n", "; "))
+            raise
+
     # generate the list of feature class properties
     fc_properties_list = [("Feature Class", fc_properties.get_fc_name(fc_path)),
                           ("Parent fGDB", fc_properties.get_fc_gdb_path(fc_path)),
@@ -136,9 +149,9 @@ def main():
             log.info("{:18}: {}".format(item[0],item[1]))
 
     # write the list of feature class properties to Excel
-    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
+
     log.debug("xls_path = " + xls_path)
-    write_fc_properties_to_xls(fc_properties_list, xls_path)
+    xls_output.write_fc_properties(fc_properties_list, xls_path)
 
     log.info("Finished")
     end_time = datetime.datetime.now()
