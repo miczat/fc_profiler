@@ -13,8 +13,17 @@ def write_fc_properties(data, xls_path):
     """
 
     book = xlwt.Workbook()
-    sheet1 = book.add_sheet("fc_properties")
-    log.info("Writing " + xls_path)
+    sheet = book.add_sheet("fc_properties")
+
+    cols = ["A", "B"]
+
+    row_num = 1
+    for record in data:
+        sheet.write(row_num, 1, record[0])  # row, column, value
+        sheet.write(row_num, 2, record[1])  # row, column, value
+        row_num = row_num + 1
+
+    log.info("saving " + xls_path)
     try:
         book.save(xls_path)
     except Error as e:
@@ -23,3 +32,4 @@ def write_fc_properties(data, xls_path):
 
     # if all went well
     return True
+
