@@ -1,4 +1,5 @@
 from unittest import TestCase
+from fc_properties import get_fc_gdb_path
 from fc_properties import get_fc_name
 from fc_properties import get_fc_geometry_type
 import os
@@ -6,6 +7,15 @@ import os
 # self.assertEqual( <expected>, <actual>)
 
 fgdb = r"C:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"
+
+
+
+class Testget_fc_gdb_path(TestCase):
+
+    def test_get_fc_gdb_path_normal(self):
+        fc_path = r"c:\tmp\test.gdb\featureclass"
+        self.assertEqual(r"c:\tmp\test.gdb", get_fc_gdb_path(fc_path))
+
 
 
 class Testget_fc_name(TestCase):

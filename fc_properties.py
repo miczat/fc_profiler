@@ -4,6 +4,19 @@ log = logging.getLogger()
 
 
 # -----------------------------------------
+# get_fc_gdb_name
+# -----------------------------------------
+
+def get_fc_gdb_path(fc_path):
+    """returns the path of the parent file geodatabase
+    pre: the fc_path is a valid fGDB path"""
+    gdb_path = fc_path.split(".gdb", 1)[0] + ".gdb"
+    log.debug("get_fc_gdb_path returning: " + gdb_path)
+    return gdb_path
+
+
+
+# -----------------------------------------
 # get name
 # -----------------------------------------
 

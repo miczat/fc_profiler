@@ -24,18 +24,22 @@
 #     -
 #
 # Issues and known limitations:
-#     -
-#     -
+#     Designed to work with Point, Polyline, Polygon, Multipoint and
+#     Multipatch feature classes.
+#
+#     No current support for:
+#      - shapefiles  (pull into a fGDB first)
+#      - annotation FC
 #
 # Ref:
 #     url
 #
 # ----------------------------------------------------------------------------
 
-import arcpy
-from arcpy import env
+#import arcpy
 import logging
 import os
+import sys
 import datetime
 import fc_properties
 
@@ -49,8 +53,9 @@ program_name = r"fc_profile"
 log_folder = r"."
 #fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
 #fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
-fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
+#fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
 #fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
+fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
 overwrite = True  # overwrite the existing output files?
 
 
@@ -96,12 +101,36 @@ def main():
     """main"""
     log.info("Start")
 
+    fc_gdb_path = fc_properties.get_fc_gdb_path(fc_path)
+    if not os.path.isdir(fc_gdb_path):
+        log.warning("Input feature class fGDB does not exist. Stopping.")
+        sys.exit(1)
+
+
+    log.info("gdb_path  = " + str(fc_properties.get_fc_gdb_path(fc_path)))
     log.info("fc_name   = " + str(fc_properties.get_fc_name(fc_path)))
     log.info("fc_type   = " + str(fc_properties.get_fc_geometry_type(fc_path)))
     log.info("crs_name  = " + str(fc_properties.get_crs_name(fc_path)))
     log.info("crs_wkid  = " + str(fc_properties.get_crs_wkid(fc_path)))
     log.info("crs_type  = " + str(fc_properties.get_crs_type(fc_path)))
     log.info("crs_units = " + str(fc_properties.get_crs_units(fc_path)))
+
+
+    # }
+    #
+    # Input
+    # FC
+    # name
+    # Input
+    # FC
+    # path
+    #
+    # CRS
+    # name
+    # factory
+    # code
+    # type
+    # units
 
     log.info("Finished")
     end_time = datetime.datetime.now()
