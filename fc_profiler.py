@@ -41,6 +41,9 @@ import logging
 import os
 import sys
 import datetime
+
+import xlwt
+
 import fc_properties
 
 start_time = datetime.datetime.now()
@@ -51,13 +54,13 @@ log = logging.getLogger()
 # -----------------------------------------
 program_name = r"fc_profile"
 log_folder = r"."
-#fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
-#fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
+# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
+# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
 fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
-#fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
-#fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
+# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
+# fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
 overwrite = True  # overwrite the existing output files?
-xls_folder = r"c:\tmp\fc_profiler_testdata"
+xls_folder = r"C:\tmp\fc_profiler_testdata"
 
 # -----------------------------------------
 # create and configure the logger
@@ -93,6 +96,16 @@ def setup_logger():
     log.addHandler(ch)
 
 
+# -----------------------------------------
+# Write to excel
+# -----------------------------------------
+
+def write_fc_properties_to_xls(fc_properties_list,xls_path):
+    """"writes the simple feature class properties to a page in an XLS"""
+    book = xlwt.Workbook()
+    sheet1 = book.add_sheet("fc_properties")
+    book.save(xls_path)
+
 
 # -----------------------------------------
 # main
@@ -123,9 +136,9 @@ def main():
             log.info("{:18}: {}".format(item[0],item[1]))
 
     # write the list of feature class properties to Excel
-    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path))
-    #TOOD write_fc_properties_to_xls(fc_properties_list, xls_path)
-
+    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
+    log.debug("xls_path = " + xls_path)
+    write_fc_properties_to_xls(fc_properties_list, xls_path)
 
     log.info("Finished")
     end_time = datetime.datetime.now()
