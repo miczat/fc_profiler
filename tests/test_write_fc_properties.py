@@ -17,8 +17,30 @@ class TestWrite_fc_properties(TestCase):
         if os.path.exists(self.xls_path):
             os.remove(self.xls_path)
 
-    def test_write_fc_properties_normal(self):
 
+    def test_write_fc_properties_to_xls_check_return_value(self):
+        # test data
+        fc_name = "test_fc"
+        fc_gdb_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"
+        fc_geometry = "Point"
+        crs_name = "GCS_WGS_1984"
+        crs_wkid = 4326
+        crs_type = "Geographic"
+        crs_units = "Degree"
+
+        fc_properties_list = [("Feature Class", fc_name),
+                              ("Parent fGDB", fc_gdb_path),
+                              ("Geometry Type",fc_geometry),
+                              ("CRS Name", crs_name),
+                              ("CRS EPSG WKID", crs_wkid),
+                              ("CRS Type", crs_type),
+                              ("CRS Units", crs_units)]
+
+        # the called function returns true
+        self.assertTrue(write_fc_properties(fc_properties_list, self.xls_path))
+
+
+    def test_write_fc_properties_check_xls_file_written(self):
         """test normal writing of the xls"""
         # test data
         fc_name = "test_fc"
@@ -29,7 +51,6 @@ class TestWrite_fc_properties(TestCase):
         crs_type = "Geographic"
         crs_units = "Degree"
 
-
         fc_properties_list = [("Feature Class", fc_name),
                               ("Parent fGDB", fc_gdb_path),
                               ("Geometry Type",fc_geometry),
@@ -39,16 +60,13 @@ class TestWrite_fc_properties(TestCase):
                               ("CRS Units", crs_units)]
 
         # call function being tested
-        result = write_fc_properties(fc_properties_list, self.xls_path)
+        write_fc_properties(fc_properties_list, self.xls_path)
+        self.assertTrue(os.path.exists(self.xls_path))
 
-        print("tmp file location = " + self.xls_path)
 
-        # Fail if the function retuens false or the outpur file is not found
-        if result is False or not os.path.exists(self.xls_path):
-            self.fail()
+    #TODO - test content of file?
 
     def tearDown(self):
-        #delete the temp file
         if os.path.exists(self.xls_path):
-            print("deleting temp xls file")
+            print("deleting temp file     " + self.xls_path)
             os.remove(self.xls_path)
