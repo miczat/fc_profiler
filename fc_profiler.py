@@ -3,36 +3,11 @@
 #
 # description: Creates a profile of a feature class in an XLS file
 #
-#              coordinate reference system
-#
-#
 # version      1.0
 # author       Mic Zatorsky
-# created      28/07/2018
+# created      04/08/2018
 #
-# param:       none
-#
-# pre:         input feature class exists and is writable
-#
-# return:      none
-#
-# post:        none
-#
-# Run instructions:
-#     configure run config (globals)
-#     -
-#     -
-#
-# Issues and known limitations:
-#     Designed to work with Point, Polyline, Polygon, Multipoint and
-#     Multipatch feature classes.
-#
-#     No current support for:
-#      - shapefiles  (pull into a fGDB first)
-#      - annotation FC
-#
-# Ref:
-#     url
+# documentation:  https://github.com/miczat/fc_profiler
 #
 # ----------------------------------------------------------------------------
 
@@ -55,11 +30,6 @@ log_folder = r"."
 overwrite = True  # overwrite the existing output files
 logfile_ext = ".log.csv"  # easier viewing in excel
 report_ext = "_fc_profile.xls"
-
-# if no args are specifed, use these (for testing only)
-
-fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
-out_folder = r"C:\tmp\fc_profiler_testdata"
 
 
 # -----------------------------------------
@@ -100,16 +70,18 @@ def setup_logger():
 # -----------------------------------------
 
 
-def get_args():
+def parse_arguments():
     """
     gets command line arguments
-    :param None
-    :return: a tuple with arguments (fc_path, out_folder)
+    positional arguments (no flags)
+    :return: a tuple as (fc_path, out_folder)
     """
+    parser = argparse.ArgumentParser(description="fc_profiler")
+    parser.add_argument("fc_path", help="full path to the feature class")
+    parser.add_argument("out_folder", help="the output folder")
+    args = parser.parse_args()
+    return args.fc_path, args.out_folder
 
-
-    # cast to string!!
-    return (fc_path, out_folder)
 
 # -----------------------------------------
 # validate inputs
@@ -123,7 +95,6 @@ def validate_inputs(fc_path, out_folder):
     pre: the input feature class exists
     pre: the output xls is somewhere that can be writen too
     post: retuen True, or raise an exception
-    :return: True, if no exceptions are thrown
     """
 
     # check that the input GDB exists
@@ -139,9 +110,6 @@ def validate_inputs(fc_path, out_folder):
     if not os.access(out_folder, os.W_OK):
         log.warning("No write access to the output folder. Stopping.")
         sys.exit(1)
-
-    return True
-
 
 # -----------------------------------------
 # delete existing xls
@@ -208,16 +176,13 @@ def profile(fc_path, xls_path):
 # -----------------------------------------
 
 
-def main():
-    """main"""
+def main(fc_path, out_folder):
+    """main
+    :param args: -the arguments passed into the program
+    """
+
     log.info("fc_profiler Start")
 
-    log.info("get args")
-    args = get_args()
-    fc_path = args[0]
-    out_folder = args[1]
-    log.debug("arg fc_path = " + fc_path)
-    log.debug("arg out_folder = " + out_folder)
 
     log.info("Validating inputs")
     validate_inputs(fc_path, out_folder)
@@ -239,4 +204,9 @@ def main():
 
 if __name__ == "__main__":
     setup_logger()
-    main()
+    args = parse_arguments()
+    fc_path = args[0]
+    out_folder = args[1]
+    log.debug("arg fc_path = " + fc_path)
+    log.debug("arg out_folder = " + out_folder)
+    main(fc_path,out_folder)

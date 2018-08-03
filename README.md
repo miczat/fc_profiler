@@ -58,18 +58,16 @@ TBA
 
 ## Usage
 
-Edit the **#run config** section of the code in ```fc_profile.py``` and run.
-
-_soon…_
-
-
 ```
-C:\>python fc_profiler -f c:\tmp\data.gdb\roads -o c:\temp
+python fc_profiler.py <input_fc> <output_folder>
 ```
-_where_
 
-&nbsp;&nbsp;&nbsp;&nbsp;```-f``` input feature class\
-&nbsp;&nbsp;&nbsp;&nbsp;```-o``` output folder for the report
+_for example_
+```
+C:\>python fc_profiler.py c:\temp\data.gdb\roads c:\temp
+```
+
+
  
 _later..._
 
