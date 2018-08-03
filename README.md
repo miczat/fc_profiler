@@ -1,17 +1,17 @@
-#fc_profiler
+# fc_profiler
 
 A tool that helps understand data in an undocumented world.
 
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
-##Installation
+## Installation
 Requires the python libraries that ship with Esri ArcGIS 10.3 or greater.
 
 
-###Requirements
+### Requirements
 TBA
 
-##Usage
+## Usage
 
 
 Edit the **#run config** section of the code in ```fc_profile.py``` and run.
@@ -31,13 +31,13 @@ _later..._
 
 I'll create a python toolbox for ArcMap
 
-##Known bugs and issues
+## Known bugs and issues
 * This has been developed and tested against ArcGIS versions 10.3 and 10.6
 * Right now, it doesn’t do much at all
 * It runs all profile tests
 
 
-##Why?
+## Why?
 
 This is fundamentally an excuse to learn:
 * **Python 2.7** (and later 3)
@@ -49,18 +49,18 @@ This is fundamentally an excuse to learn:
 * The **PyCharm IDE**
 
 
-##Git/GitHub workflow
+## Git/GitHub workflow
 * _master_ is release-ready code
 * development on branches
 
-##Testing
+## Testing
 * This is a database app and tests are run against a set of pre-made file GDBs
 * The test databases are scripted via unittests
 
-##Licence
+## Licence
 The content of this repository is licensed under a Creative Commons Attribution-ShareAlike 4.0 International (CC BT-SA 4.0)
 
 
-###About the author
+### About the author
 **fc_profiler** is being developed by Mic Zatorsky
 
