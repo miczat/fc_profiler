@@ -12,6 +12,7 @@ Information listed:
 * coordinate system type
 * coordinate system units
 
+&nbsp;
 
 Planned for development
 * how many records
@@ -57,7 +58,6 @@ TBA
 
 ## Usage
 
-
 Edit the **#run config** section of the code in ```fc_profile.py``` and run.
 
 _soon…_
@@ -74,6 +74,11 @@ _where_
 _later..._
 
 I'll create a python toolbox for ArcMap
+
+### Output
+
+An xls file with the same name as the input feature class and with the suffix and extension ```_fc_profile.xls```
+
 
 ## Known bugs and issues
 * This has been developed and tested against ArcGIS versions 10.3 and 10.6

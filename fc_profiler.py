@@ -36,35 +36,29 @@
 #
 # ----------------------------------------------------------------------------
 
-#import arcpy
+
 import logging
 import os
 import sys
 import datetime
-import xlwt
-
 import fc_properties
 import xls_output
 
 start_time = datetime.datetime.now()
 log = logging.getLogger()
 
-# -----------------------------------------
-# run config (globals)
-# -----------------------------------------
+# --------------------------------------------
+# run config (globals) - not user configurable
+# --------------------------------------------
 program_name = r"fc_profile"
 log_folder = r"."
-overwrite = True  # overwrite the existing output files. not configurable by user
+overwrite = True  # overwrite the existing output files
+logfile_ext = ".log.csv"  # easier viewing in excel
+report_ext = "_fc_profile.xls"
 
+# if no args are specifed, use these (for testing only)
 
-# if no args are specifed, use thees
-
-# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
-# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
 fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
-# fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
-# fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
-
 xls_folder = r"C:\tmp\fc_profiler_testdata"
 
 
@@ -72,11 +66,10 @@ xls_folder = r"C:\tmp\fc_profiler_testdata"
 # create and configure the logger
 # -----------------------------------------
 def setup_logger():
-    logfile_ext = ".log.csv"
+    """setp the logger"""
     logfile = os.path.join(log_folder, program_name + logfile_ext)
     # log.setLevel(logging.INFO)
     log.setLevel(logging.DEBUG)
-
 
     # formatter for use by all handlers
     d = ","   # log column delimiter
@@ -101,9 +94,11 @@ def setup_logger():
     ch.setFormatter(formatter)
     log.addHandler(ch)
 
+
 # -----------------------------------------
 # validate inputs
 # -----------------------------------------
+
 
 def validate_inputs(fc_path, xls_path):
     """
@@ -143,9 +138,11 @@ def validate_inputs(fc_path, xls_path):
 
     return True
 
+
 # -----------------------------------------
 # profile
 # -----------------------------------------
+
 
 def profile(fc_path, xls_path):
     """
@@ -188,10 +185,10 @@ def main():
     log.info("fc_profiler Start")
 
     log.info("Validating inputs")
-    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
+    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + report_ext)
     validate_inputs(fc_path, xls_path)
 
-    log.info("Staring profile...")
+    log.info("Starting profile...")
     profile(fc_path, xls_path)
 
     # when done
