@@ -54,14 +54,19 @@ log = logging.getLogger()
 # -----------------------------------------
 program_name = r"fc_profile"
 log_folder = r"."
+overwrite = True  # overwrite the existing output files. not configurable by user
+
+
+# if no args are specifed, use thees
+
 # fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\MGAZ56_point"
 # fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\GDA94_GA_Lambert_point"
 fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
 # fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\NO_CRS_point"
 # fc_path = r"c:\tmp\fc_profiler_testdata\foo.gdb\bah"
-overwrite = True  # overwrite the existing output files?
+
 xls_folder = r"C:\tmp\fc_profiler_testdata"
-overwrite = True  # overwrite the output xls if it exists?
+
 
 # -----------------------------------------
 # create and configure the logger
@@ -180,20 +185,20 @@ def profile(fc_path, xls_path):
 
 def main():
     """main"""
-    log.info("Start")
+    log.info("fc_profiler Start")
 
-    # validate the inputs
+    log.info("Validating inputs")
     xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
     validate_inputs(fc_path, xls_path)
 
-    # profile the data
+    log.info("Staring profile...")
     profile(fc_path, xls_path)
 
     # when done
-    log.info("Finished")
+    log.info("fc_profiler Finished")
     end_time = datetime.datetime.now()
     duration = end_time - start_time
-    log.info("Duration " + str(duration))
+    log.info("fc_profiler Duration " + str(duration))
 
 
 if __name__ == "__main__":
