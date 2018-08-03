@@ -36,10 +36,10 @@
 #
 # ----------------------------------------------------------------------------
 
-
 import logging
 import os
 import sys
+import argparse
 import datetime
 import fc_properties
 import xls_output
@@ -59,7 +59,7 @@ report_ext = "_fc_profile.xls"
 # if no args are specifed, use these (for testing only)
 
 fc_path = r"c:\tmp\fc_profiler_testdata\fc_profiler_test.gdb\WGS84_point"
-xls_folder = r"C:\tmp\fc_profiler_testdata"
+out_folder = r"C:\tmp\fc_profiler_testdata"
 
 
 # -----------------------------------------
@@ -96,14 +96,30 @@ def setup_logger():
 
 
 # -----------------------------------------
+# get args
+# -----------------------------------------
+
+
+def get_args():
+    """
+    gets command line arguments
+    :param None
+    :return: a tuple with arguments (fc_path, out_folder)
+    """
+
+
+    # cast to string!!
+    return (fc_path, out_folder)
+
+# -----------------------------------------
 # validate inputs
 # -----------------------------------------
 
 
-def validate_inputs(fc_path, xls_path):
+def validate_inputs(fc_path, out_folder):
     """
     :param fc_path: - fully qualified path to the input feature class to profile
-    :param xls_path: - fully qualified path to the output xls to write
+    :param out_folder: - fully qualified path to the output xls to write
     pre: the input feature class exists
     pre: the output xls is somewhere that can be writen too
     post: retuen True, or raise an exception
@@ -112,20 +128,34 @@ def validate_inputs(fc_path, xls_path):
 
     # check that the input GDB exists
     fc_gdb_path = fc_properties.get_fc_gdb_path(fc_path)
+    log.debug("Checking input feature class exists")
     if not os.path.isdir(fc_gdb_path):
         log.warning("Input feature class fGDB does not exist. Stopping.")
         sys.exit(1)
 
-    # check that the output XLS folder can be written to.
+    # check that the output folder exists and cab be written to.
     # Better to know now than after 10 minutes of profiling
-    if not os.access(xls_folder, os.W_OK):
+    log.debug("Checking output folder exists and can be written to")
+    if not os.access(out_folder, os.W_OK):
         log.warning("No write access to the output folder. Stopping.")
         sys.exit(1)
 
-    # if the output file exists
-    if os.path.exists(xls_path) and overwrite is True:
+    return True
+
+
+# -----------------------------------------
+# delete existing xls
+# -----------------------------------------
+
+
+def delete_existing_xls(xls_path):
+    """
+    :param xls_path: - the name of the xls file to delete
+    :return: none
+    """
+    if os.path.exists(xls_path):
         try:
-            log.info("Removing XLS " + xls_path)
+            log.debug("Removing XLS " + xls_path)
             os.remove(xls_path)
         except WindowsError as e:
             log.error("WindowsError: could not delete file")
@@ -135,8 +165,6 @@ def validate_inputs(fc_path, xls_path):
             log.error("Some other error")
             log.error(str(e).replace("\n", "; "))
             raise
-
-    return True
 
 
 # -----------------------------------------
@@ -184,9 +212,20 @@ def main():
     """main"""
     log.info("fc_profiler Start")
 
+    log.info("get args")
+    args = get_args()
+    fc_path = args[0]
+    out_folder = args[1]
+    log.debug("arg fc_path = " + fc_path)
+    log.debug("arg out_folder = " + out_folder)
+
     log.info("Validating inputs")
-    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + report_ext)
-    validate_inputs(fc_path, xls_path)
+    validate_inputs(fc_path, out_folder)
+
+    xls_path = os.path.join(out_folder, fc_properties.get_fc_name(fc_path) + report_ext)
+    if overwrite is True:
+        log.info("Deleting existing xls file")
+        delete_existing_xls(xls_path)
 
     log.info("Starting profile...")
     profile(fc_path, xls_path)
