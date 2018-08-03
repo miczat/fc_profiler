@@ -13,17 +13,23 @@ TBA
 
 ##Usage
 
-_now_
 
-Edit the **#run config** section of the code and run.
+Edit the **#run config** section of the code in ```fc_profile.py``` and run.
 
 _soon…_
-```
-C:\>python fc_profiler --fc c:\tmp\data.gdb\roads –-xlsdir c:\temp
-```
-_later__
 
-Create a python tool for ArcMap, using the ArcGIS tool GUI
+
+```
+C:\>python fc_profiler -f c:\tmp\data.gdb\roads -o c:\temp
+```
+_where_
+
+&nbsp;&nbsp;&nbsp;&nbsp;```-f``` input feature class\
+&nbsp;&nbsp;&nbsp;&nbsp;```-o``` output folder for the report
+ 
+_later..._
+
+I'll create a python toolbox for ArcMap
 
 ##Known bugs and issues
 * This has been developed and tested against ArcGIS versions 10.3 and 10.6
@@ -42,8 +48,6 @@ This is fundamentally an excuse to learn:
 * Writing READMEs and **markdown**
 * The **PyCharm IDE**
 
-_Why these versions?_
-* I work behind a military grade firewall. I’m using what comes with ArcGIS 10.3… yeah, that’s 10.3….
 
 ##Git/GitHub workflow
 * _master_ is release-ready code
