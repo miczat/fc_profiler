@@ -6,7 +6,6 @@ log = logging.getLogger()
 # Write to excel
 # -----------------------------------------
 
-
 def write_fc_properties(data, xls_path):
     """"writes the feature class properties to a page in an XLS
         pre: the xls file can be crated (user has write permission to folder)

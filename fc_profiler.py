@@ -96,16 +96,19 @@ def setup_logger():
     ch.setFormatter(formatter)
     log.addHandler(ch)
 
-
-
-
 # -----------------------------------------
-# main
+# validate inputs
 # -----------------------------------------
 
-def main():
-    """main"""
-    log.info("Start")
+def validate_inputs(fc_path, xls_path):
+    """
+    :param fc_path: - fully qualified path to the input feature class to profile
+    :param xls_path: - fully qualified path to the output xls to write
+    pre: the input feature class exists
+    pre: the output xls is somewhere that can be writen too
+    post: retuen True, or raise an exception
+    :return: True, if no exceptions are thrown
+    """
 
     # check that the input GDB exists
     fc_gdb_path = fc_properties.get_fc_gdb_path(fc_path)
@@ -120,7 +123,6 @@ def main():
         sys.exit(1)
 
     # if the output file exists
-    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
     if os.path.exists(xls_path) and overwrite is True:
         try:
             log.info("Removing XLS " + xls_path)
@@ -133,6 +135,24 @@ def main():
             log.error("Some other error")
             log.error(str(e).replace("\n", "; "))
             raise
+
+    return True
+
+# -----------------------------------------
+# profile
+# -----------------------------------------
+
+def profile(fc_path, xls_path):
+    """
+    this is the main function that controls the profile generation
+
+    :param fc_path: - fully qualified path to the input feature class to profile
+    :param xls_path: - fully qualified path to the output xls to write
+    pre: the input feature class exists
+    pre: the output xls is somewhere that can be writen too
+    post: a xls file will be written
+    :return: None
+    """
 
     # generate the list of feature class properties
     fc_properties_list = [("Feature Class", fc_properties.get_fc_name(fc_path)),
@@ -149,10 +169,27 @@ def main():
             log.info("{:18}: {}".format(item[0],item[1]))
 
     # write the list of feature class properties to Excel
-
     log.debug("xls_path = " + xls_path)
     xls_output.write_fc_properties(fc_properties_list, xls_path)
 
+
+# -----------------------------------------
+# main
+# -----------------------------------------
+
+
+def main():
+    """main"""
+    log.info("Start")
+
+    # validate the inputs
+    xls_path = os.path.join(xls_folder, fc_properties.get_fc_name(fc_path) + ".xls")
+    validate_inputs(fc_path, xls_path)
+
+    # profile the data
+    profile(fc_path, xls_path)
+
+    # when done
     log.info("Finished")
     end_time = datetime.datetime.now()
     duration = end_time - start_time
