@@ -97,6 +97,9 @@ This is fundamentally an excuse to learn:
 
 And because I never get good metadata.
 
+## Architecture
+
+![](https://www.lucidchart.com/publicSegments/view/e96cd7de-7b89-45a2-8bd4-3396e7b224f1/image.png)
 
 ## Git/GitHub workflow
 * ```master``` is release-ready code
