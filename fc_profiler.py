@@ -25,7 +25,7 @@ log = logging.getLogger()
 # --------------------------------------------
 # run config (globals) - not user configurable
 # --------------------------------------------
-program_name = r"fc_profile"
+program_name = r"fc_profiler"
 log_folder = r"."
 overwrite = True  # overwrite the existing output files
 logfile_ext = ".log.csv"  # easier viewing in excel
