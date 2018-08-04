@@ -27,33 +27,36 @@ class FcProfiler(object):
         in_fc = arcpy.Parameter(
             displayName="Input Feature Class",
             name="in_fc",
-            datatype="Feature Class",
+            datatype="DEFeatureClass",
             parameterType="Required",
             direction="Input")
         in_fc.filter.list = ["Point", "Polyline", "Polygon"]
 
         # output folder
+        # datatype="DEFolder" not used as it allows for the selection of a file
         out_folder = arcpy.Parameter(
             displayName="Output Folder",
             name="out_folder",
-            datatype="Folder",
+            datatype="DEWorkspace",
             parameterType="Required",
             direction="Input")
+        out_folder.filter.list = ["File System"]
 
         params = [in_fc, out_folder]
         return params
 
 
-
-
     def isLicensed(self):
         """Set whether tool is licensed to execute."""
+        # No known licencing dependencies
         return True
 
     def updateParameters(self, parameters):
         """Modify the values and properties of parameters before internal
         validation is performed.  This method is called whenever a parameter
         has been changed."""
+
+
         return
 
     def updateMessages(self, parameters):
