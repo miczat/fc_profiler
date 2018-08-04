@@ -1,7 +1,5 @@
 # fc_profiler
 
-A tool that helps understand data in an undocumented world.
-
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
 Information listed:
@@ -14,7 +12,9 @@ Information listed:
 
 &nbsp;
 
-Planned for development
+_Planned for development_
+
+* Python 3 / ArcGIS Pro port
 * how many records
 * does the data have M-values?
 * does the data have Z-values?
@@ -78,11 +78,19 @@ I'll create a python toolbox for ArcMap
 An xls file with the same name as the input feature class and with the suffix and extension ```_fc_profile.xls```
 
 
-## Known bugs and issues
-* This has been developed and tested against ArcGIS versions 10.3 and 10.6
-* Right now, it doesn’t do much at all
-* It runs all profile tests
 
+## Version differences
+_The python toolbox version_
+* has a GUI
+* filters input for points, polylines and polygons 
+
+
+
+## Known bugs, issues & limitations
+* This has been developed and tested against ArcGIS versions 10.3 and 10.6
+* Right now, it does not do much at all
+* It will run all profiles, until designed to do a subset
+* It will profile all fields, until designed to do a subset
 
 ## Why?
 
