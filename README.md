@@ -103,8 +103,12 @@ And because I never get good metadata.
 * development on branches
 
 ## Testing
-* This is a database app and tests are run against a set of pre-made file GDBs
-* The test databases are scripted via unittests
+* This is a database app.  Unit and integration tests are run against a set of scripted test GDBs
+* The test GDBs and their Feature Classes can be deployed using ```create_test_data.py```   
+* Edit the ```#run config``` section to specify the test DB installation folder  before running
+* The test scripts are in ```tests```
+* Edit the ```#run config``` section in each script specify the test DB installation folder
+* ```tests\test_fcp_cmdline.bat``` executes a suite of tests checking program exit codes when called form the command line 
 
 ## Licence
 The content of this repository is licensed under a _Creative Commons Attribution-ShareAlike 4.0 International_ [(CC BT-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/)

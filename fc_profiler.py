@@ -101,8 +101,9 @@ def validate_inputs(fc_path, out_folder):
     fc_gdb_path = fc_properties.get_fc_gdb_path(fc_path)
     log.debug("Checking input feature class exists")
     if not os.path.isdir(fc_gdb_path):
-        log.warning("Input feature class fGDB does not exist. Stopping.")
+        log.warning("Input file GDB does not exist. Stopping.")
         sys.exit(1)
+
 
     # check that the output folder exists and cab be written to.
     # Better to know now than after 10 minutes of profiling
