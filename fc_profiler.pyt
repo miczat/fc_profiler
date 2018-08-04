@@ -45,14 +45,13 @@ class FcProfiler(object):
         out_folder.filter.list = ["File System"]
 
 
-        if DEBUG:
-            # debug message field
-            debug = arcpy.Parameter(
-                displayName="debug",
-                name="debug",
-                datatype="String",
-                parameterType="Optional",
-                direction="Input")
+        # debug message field
+        debug = arcpy.Parameter(
+            displayName="debug",
+            name="debug",
+            datatype="String",
+            parameterType="Optional",
+            direction="Input")
 
         params = [in_fc, out_folder, debug]
         return params
@@ -68,24 +67,28 @@ class FcProfiler(object):
         validation is performed.  This method is called whenever a parameter
         has been changed."""
 
-        # Get Inputs
+        # GetInputs
+        in_fc = parameters[0]
         out_folder = parameters[1]
         debug = parameters[2]
 
-        debug.value = out_folder.valueAsText
-
-        # check output folder write access  string to string comparison,
-        # valueAsText returns unicode
-        if not os.access(str(out_folder.valueAsText), os.W_OK):
-            debug.value = "This folder is NOT writable"
-        else:
-            debug.value = "This folder IS writable"
+        # DEBUG check
+        debug.value = str(in_fc.valueAsText) + "; " + str(out_folder.valueAsText)
 
         return
+
 
     def updateMessages(self, parameters):
         """Modify the messages created by internal validation for each tool
         parameter.  This method is called after internal validation."""
+        # Get Inputs
+        out_folder = parameters[1]
+
+        # Check output folder write access
+        # .valueAsText returns unicode, so cast for string to string comparison,
+        if not os.access(str(out_folder.valueAsText), os.W_OK):
+            out_folder.setErrorMessage("The selected folder cannot be written to.\n"
+                                       "Please choose another folder.")
         return
 
     def execute(self, parameters, messages):
