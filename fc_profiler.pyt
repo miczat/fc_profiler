@@ -1,4 +1,5 @@
 import arcpy
+import os
 
 # TO DO add logging
 
@@ -33,7 +34,8 @@ class FcProfiler(object):
         in_fc.filter.list = ["Point", "Polyline", "Polygon"]
 
         # output folder
-        # datatype="DEFolder" not used as it allows for the selection of a file
+        # datatype="DEWorkspace" will allow folder selection, use str() to get name
+        # datatype="DEFolder" is not used as the GUI allows for the selection of a file
         out_folder = arcpy.Parameter(
             displayName="Output Folder",
             name="out_folder",
@@ -42,7 +44,17 @@ class FcProfiler(object):
             direction="Input")
         out_folder.filter.list = ["File System"]
 
-        params = [in_fc, out_folder]
+
+        if DEBUG:
+            # debug message field
+            debug = arcpy.Parameter(
+                displayName="debug",
+                name="debug",
+                datatype="String",
+                parameterType="Optional",
+                direction="Input")
+
+        params = [in_fc, out_folder, debug]
         return params
 
 
@@ -56,6 +68,18 @@ class FcProfiler(object):
         validation is performed.  This method is called whenever a parameter
         has been changed."""
 
+        # Get Inputs
+        out_folder = parameters[1]
+        debug = parameters[2]
+
+        debug.value = out_folder.valueAsText
+
+        # check output folder write access  string to string comparison,
+        # valueAsText returns unicode
+        if not os.access(str(out_folder.valueAsText), os.W_OK):
+            debug.value = "This folder is NOT writable"
+        else:
+            debug.value = "This folder IS writable"
 
         return
 
