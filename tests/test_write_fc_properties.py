@@ -17,7 +17,6 @@ class TestWrite_fc_properties(TestCase):
         if os.path.exists(self.xls_path):
             os.remove(self.xls_path)
 
-
     def test_write_fc_properties_to_xls_check_return_value(self):
         # test data
         fc_name = "test_fc"
@@ -38,7 +37,6 @@ class TestWrite_fc_properties(TestCase):
 
         # the called function returns true
         self.assertTrue(write_fc_properties(fc_properties_list, self.xls_path))
-
 
     def test_write_fc_properties_check_xls_file_written(self):
         """test normal writing of the xls"""
@@ -62,7 +60,6 @@ class TestWrite_fc_properties(TestCase):
         # call function being tested
         write_fc_properties(fc_properties_list, self.xls_path)
         self.assertTrue(os.path.exists(self.xls_path))
-
 
     #TODO - test content of file?
 

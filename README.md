@@ -1,7 +1,5 @@
 # fc_profiler
 
-A tool that helps understand data in an undocumented world.
-
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
 Information listed:
@@ -12,9 +10,9 @@ Information listed:
 * coordinate system type
 * coordinate system units
 
-&nbsp;
+_Planned for development_
 
-Planned for development
+* port to Python 3.6.5 and *ArcGIS Pro* 
 * how many records
 * does the data have M-values?
 * does the data have Z-values?
@@ -67,39 +65,48 @@ _for example_
 C:\>python fc_profiler.py c:\temp\data.gdb\roads c:\temp
 ```
 
-
- 
-_later..._
-
-I'll create a python toolbox for ArcMap
+This can also be run as Python Toolbox tool.
 
 ### Output
 
-An xls file with the same name as the input feature class and with the suffix and extension ```_fc_profile.xls```
+An Excel spreadsheet (.xls) with the same name as the input feature class and with the suffix and extension ```_fc_profile.xls``` will be created in the specified output folder. 
 
+## Version differences
+_The python toolbox version_
+* has a GUI
+* filters input for points, polylines and polygons 
 
-## Known bugs and issues
+## Known bugs, issues & limitations
 * This has been developed and tested against ArcGIS versions 10.3 and 10.6
-* Right now, it doesn’t do much at all
-* It runs all profile tests
-
+* Right now, it does not do much at all
+* It will run all profiles, until designed to do a subset
+* It will profile all fields, until designed to do a subset
 
 ## Why?
 
 This is fundamentally an excuse to learn:
 * Python 2.7 
-* ```arcpy```
+* ```arcpy``` and * Python Toolboxes (```.pyt```)
 * ```unittest```
-* ```logging```, ```xlwt```, ```argparse```, and ```sqlite```, or ```pandas```
-* Source code management, ```Git``` and **GitHub**, including GitHub **Projects** 
+* ```argparse```, ```logging```, ```xlwt```,
+* maybe ```sqlite```, or ```pandas```
+* Source code management, ```Git``` and **GitHub**, including **GitHub Projects** 
 * Writing READMEs and **markdown**
 * The **PyCharm IDE**
 
-And because I never get good metadata.
+...and because I never get good metadata.
 
 ## Architecture
+* The program can be called from either the command line, or via a Script Tool using ```fc_profiler.py```; or the python toolbox  ```fc_profiler.pyt```
 
-![](https://www.lucidchart.com/publicSegments/view/e96cd7de-7b89-45a2-8bd4-3396e7b224f1/image.png)
+* The UI is separate from the business logic in ```generate_profile.py``` and its supporting modules. 
+
+* All modules share a common logger defined in the UI scripts.
+
+* It is expected that ```fc_properties.py``` will grow and another module ```field_properties.py ``` will contain code for profiling a single column.
+
+![](https://www.lucidchart.com/publicSegments/view/7aab42e8-1db0-453c-b386-60f582b84eb7/image.png)
+
 
 ## Git/GitHub workflow
 * ```master``` is release-ready code
