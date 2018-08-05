@@ -14,6 +14,7 @@
 import arcpy
 import os
 import logging
+from generate_profile import generate_profile
 log = logging.getLogger()
 
 
@@ -22,7 +23,7 @@ log = logging.getLogger()
 # --------------------------------------------
 program_name = r"fc_profile_pyt"
 logfile_ext = ".log.csv"  # easier viewing in excel
-
+overwrite = True
 
 # --------------------------------------------------------------------------------------
 # create and configure the logger
@@ -145,18 +146,18 @@ class FcProfiler(object):
 
     def execute(self, parameters, messages):
         """The source code of the tool."""
-        in_fc = parameters[0]
-        out_folder = parameters[1]
+        fc_path = str(parameters[0].valueAsText)
+        out_folder = str(parameters[1].valueAsText)
 
-        log_folder = str(out_folder.valueAsText)
+        log_folder = str(out_folder)
         logfile = os.path.join(log_folder, program_name + logfile_ext)
         setup_logger(logfile)
 
-        # TO DO - need to call other code with the full path to the FC and output folder
+        log.info("Generating profile")
+        generate_profile(fc_path, out_folder, overwrite)
+        log.info("fc_profiler Finished")
 
-        log.debug("test DEBUG from pyt")
-        log.info("test INFO from pyt")
-
+        # close the log
         log_handlers_list = list(log.handlers)
         for h in log_handlers_list:
             log.removeHandler(h)

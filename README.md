@@ -106,6 +106,17 @@ This is fundamentally an excuse to learn:
 And because I never get good metadata.
 
 ## Architecture
+The program can be called from either:
+* the command line, or via a Script Tool using ```fc_profiler.py```; or
+* the python toolbox  ```fc_profiler.pyt```
+
+The UI is separate from the business logic in ```generate_profile.py``` and its supporting modules. 
+
+All share a common logger defined in the UI scripts.
+
+It is expected that ```fc_properties.py``` will grow and another module ```field_properties.py ``` will hold code for profiling a single column.
+
+Similatly. the 
 
 ![](https://www.lucidchart.com/publicSegments/view/7aab42e8-1db0-453c-b386-60f582b84eb7/image.png)
 
