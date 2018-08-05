@@ -1,5 +1,4 @@
 # fc_profiler
-
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
 Information listed:
@@ -36,26 +35,19 @@ _Planned for development_
 * does it contain unicode?
 * does it contain reserved characters (for Windows)?
 
-
 &nbsp;&nbsp;&nbsp;&nbsp;_for each field_
 
 * TOP 100 DISTINCT values ORDERED BY frequency DESC
 * TOP 100 DISTINCT values ORDERED BY value ASC
 * draw a histogram for numeric data
 * draw a pie chart for categorical data 
- 
-
-
+&nbsp;
 
 ## Installation
 Requires the python libraries that ship with Esri ArcGIS 10.3 or greater.
-
-
-### Requirements
-TBA
+&nbsp;
 
 ## Usage
-
 ```
 python fc_profiler.py <input_fc> <output_folder>
 ```
@@ -67,9 +59,12 @@ C:\>python fc_profiler.py c:\temp\data.gdb\roads c:\temp
 
 This can also be run as Python Toolbox tool.
 
-### Output
+![](https://www.lucidchart.com/publicSegments/view/3c1eea03-7cec-45dc-bed8-49b76b92ac7a/image.png)
+&nbsp;
 
+### Output
 An Excel spreadsheet (.xls) with the same name as the input feature class and with the suffix and extension ```_fc_profile.xls``` will be created in the specified output folder. 
+&nbsp;
 
 ## Version differences
 _The python toolbox version_
@@ -81,9 +76,9 @@ _The python toolbox version_
 * Right now, it does not do much at all
 * It will run all profiles, until designed to do a subset
 * It will profile all fields, until designed to do a subset
+&nbsp;
 
 ## Why?
-
 This is fundamentally an excuse to learn:
 * Python 2.7 
 * ```arcpy``` and * Python Toolboxes (```.pyt```)
@@ -95,6 +90,7 @@ This is fundamentally an excuse to learn:
 * The **PyCharm IDE**
 
 ...and because I never get good metadata.
+&nbsp;
 
 ## Architecture
 * The program can be called from either the command line, or via a Script Tool using ```fc_profiler.py```; or the python toolbox  ```fc_profiler.pyt```
