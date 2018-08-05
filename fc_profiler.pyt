@@ -14,7 +14,10 @@
 import arcpy
 import os
 import logging
+import datetime
 from generate_profile import generate_profile
+
+start_time = datetime.datetime.now()
 log = logging.getLogger()
 
 
@@ -73,7 +76,8 @@ class FcProfiler(object):
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
         self.label = "FcProfiler"
-        self.description = "Generate a data profile for a feature class"
+        self.description = "Generate a data profile for a feature class.\n " +\
+                           "Results are exported to XLS in the specified folder"
         self.canRunInBackground = False
 
     def getParameterInfo(self):
@@ -99,15 +103,16 @@ class FcProfiler(object):
             direction="Input")
         out_folder.filter.list = ["File System"]
 
-        # debug message field
-        debug = arcpy.Parameter(
-            displayName="debug",
-            name="debug",
-            datatype="String",
-            parameterType="Optional",
-            direction="Input")
+        # # debug message field
+        # debug = arcpy.Parameter(
+        #     displayName="debug",
+        #     name="debug",
+        #     datatype="String",
+        #     parameterType="Optional",
+        #     direction="Input")
+        # params = [in_fc, out_folder, debug]
 
-        params = [in_fc, out_folder, debug]
+        params = [in_fc, out_folder]
         return params
 
 
@@ -124,10 +129,10 @@ class FcProfiler(object):
         # GetInputs
         in_fc = parameters[0]
         out_folder = parameters[1]
-        debug = parameters[2]
+        # debug = parameters[2]
 
         # DEBUG check
-        debug.value = str(in_fc.valueAsText) + "; " + str(out_folder.valueAsText)
+        # debug.value = str(in_fc.valueAsText) + "; " + str(out_folder.valueAsText)
 
         return
 
@@ -145,17 +150,26 @@ class FcProfiler(object):
         return
 
     def execute(self, parameters, messages):
-        """The source code of the tool."""
         fc_path = str(parameters[0].valueAsText)
         out_folder = str(parameters[1].valueAsText)
 
+        # setup the logger
         log_folder = str(out_folder)
         logfile = os.path.join(log_folder, program_name + logfile_ext)
         setup_logger(logfile)
 
+        # do the work
         log.info("Generating profile")
+        messages.addMessage("Input feature class =")
+        messages.addMessage(fc_path)
+        messages.addMessage("Output folder =")
+        messages.addMessage(out_folder)
         generate_profile(fc_path, out_folder, overwrite)
+
         log.info("fc_profiler Finished")
+        end_time = datetime.datetime.now()
+        duration = end_time - start_time
+        log.info("fc_profiler Duration " + str(duration))
 
         # close the log
         log_handlers_list = list(log.handlers)

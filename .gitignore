@@ -13,6 +13,8 @@ pip-selfcheck.json
 #compiled python
 *.pyc
 
+#tmp xml files
+
 #temp files
 ~*
 tmp_*

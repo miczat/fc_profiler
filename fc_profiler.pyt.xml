@@ -6,7 +6,7 @@
 		<ArcGISFormat>1.0</ArcGISFormat>
 		<SyncOnce>TRUE</SyncOnce>
 		<ModDate>20180805</ModDate>
-		<ModTime>130647</ModTime>
+		<ModTime>151527</ModTime>
 	</Esri>
 	<toolbox name="fc_profiler" alias="fcProfilerPyToolbox">
 		<arcToolboxHelpPath>c:\program files (x86)\arcgis\desktop10.6\Help\gp</arcToolboxHelpPath>
@@ -16,7 +16,8 @@
 		<idCitation>
 			<resTitle>fc_profiler</resTitle>
 		</idCitation>
-	</dataIdInfo>
+		<idAbs>Generate a data profile report for a feature class.  Results are output to XLS in the specified folder.
+</idAbs></dataIdInfo>
 	<distInfo>
 		<distributor>
 			<distorFormat>
