@@ -25,19 +25,17 @@ log = logging.getLogger()
 # run config (globals) - not user configurable
 # --------------------------------------------
 program_name = r"fc_profile"
-log_folder = r"."
-overwrite = True  # overwrite the existing output files
 logfile_ext = ".log.csv"  # easier viewing in excel
-
+overwrite = True  # overwrite the existing output files
 
 # -----------------------------------------
 # create and configure the logger
 # -----------------------------------------
 
 
-def setup_logger():
-    """setp the logger"""
-    logfile = os.path.join(log_folder, program_name + logfile_ext)
+def setup_logger(logfile):
+    """setup the logger"""
+
     # log.setLevel(logging.INFO)
     log.setLevel(logging.DEBUG)
 
@@ -47,18 +45,17 @@ def setup_logger():
     datetime_fmt_str  = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(log_msg_format_str,datetime_fmt_str)
 
-    # create file handler which logs even debug messages
+    # file handler
     try:
         fh = logging.FileHandler(filename=logfile,mode='w')
     except IOError as e:
         print("The log file is read only. Program stopping")
         raise
-
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     log.addHandler(fh)
 
-    # create console handler with a higher log level
+    # console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
     ch.setFormatter(formatter)
@@ -137,10 +134,21 @@ def main(fc_path, out_folder):
 
 
 if __name__ == "__main__":
-    setup_logger()
     args = parse_arguments()
     fc_path = args[0]
     out_folder = args[1]
+    logfile = os.path.join(out_folder, program_name + logfile_ext)
+    setup_logger(logfile)
     log.debug("arg fc_path = " + fc_path)
     log.debug("arg out_folder = " + out_folder)
+
+    # magic happens
     main(fc_path, out_folder)
+
+    log.debug("Closing the log file")
+    log = logging.getLogger()
+    log_handlers_list = list(log.handlers)
+    for h in log_handlers_list:
+        log.removeHandler(h)
+        h.flush()
+        h.close()

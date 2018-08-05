@@ -1,7 +1,60 @@
+# ----------------------------------------------------------------------------
+# name:        fc_profiler.pyt
+#
+# description: Creates a profile of a feature class in an XLS file
+#
+# version      1.0
+# author       Mic Zatorsky
+# created      05/08/2018
+#
+# documentation:  https://github.com/miczat/fc_profiler
+#
+# ----------------------------------------------------------------------------
+
 import arcpy
 import os
+import logging
+log = logging.getLogger()
 
-# TO DO add logging
+
+# --------------------------------------------
+# run config (globals) - not user configurable
+# --------------------------------------------
+program_name = r"fc_profile_pyt"
+logfile_ext = ".log.csv"  # easier viewing in excel
+
+
+# --------------------------------------------------------------------------------------
+# create and configure the logger
+# the PYT file sees from C:\WINDOWS\System32 as its current location, so instead we
+#   will log to the output
+# ---------------------------------------------------------------------------------------
+
+def setup_logger(logfile):
+    """setup the logger"""
+    # log.setLevel(logging.INFO)
+    log.setLevel(logging.DEBUG)
+
+    # formatter for use by all handlers
+    d = ","  # log column delimiter
+    log_msg_format_str = '%(asctime)s' + d + '%(levelname)s' + d + '"%(message)s"'
+    datetime_fmt_str = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter(log_msg_format_str, datetime_fmt_str)
+
+    # file handler
+    try:
+        fh = logging.FileHandler(filename=logfile, mode='w')
+    except IOError as e:
+        print("The log file is read only. Program stopping")
+        raise
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+
+
+# --------------------------------------------
+# Python Toolbox code
+# --------------------------------------------
 
 class Toolbox(object):
     def __init__(self):
@@ -15,6 +68,7 @@ class Toolbox(object):
 
 
 class FcProfiler(object):
+
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
         self.label = "FcProfiler"
@@ -43,7 +97,6 @@ class FcProfiler(object):
             parameterType="Required",
             direction="Input")
         out_folder.filter.list = ["File System"]
-
 
         # debug message field
         debug = arcpy.Parameter(
@@ -77,7 +130,6 @@ class FcProfiler(object):
 
         return
 
-
     def updateMessages(self, parameters):
         """Modify the messages created by internal validation for each tool
         parameter.  This method is called after internal validation."""
@@ -93,7 +145,22 @@ class FcProfiler(object):
 
     def execute(self, parameters, messages):
         """The source code of the tool."""
+        in_fc = parameters[0]
+        out_folder = parameters[1]
+
+        log_folder = str(out_folder.valueAsText)
+        logfile = os.path.join(log_folder, program_name + logfile_ext)
+        setup_logger(logfile)
 
         # TO DO - need to call other code with the full path to the FC and output folder
+
+        log.debug("test DEBUG from pyt")
+        log.info("test INFO from pyt")
+
+        log_handlers_list = list(log.handlers)
+        for h in log_handlers_list:
+            log.removeHandler(h)
+            h.flush()
+            h.close()
 
         return

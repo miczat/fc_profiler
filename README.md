@@ -107,7 +107,7 @@ And because I never get good metadata.
 
 ## Architecture
 
-![](https://www.lucidchart.com/publicSegments/view/e96cd7de-7b89-45a2-8bd4-3396e7b224f1/image.png)
+![](https://www.lucidchart.com/publicSegments/view/7aab42e8-1db0-453c-b386-60f582b84eb7/image.png)
 
 ## Git/GitHub workflow
 * ```master``` is release-ready code
