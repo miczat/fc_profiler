@@ -1,5 +1,10 @@
 # fc_profiler
+
+This is a data interrogation tool for use with Esri ArcGIS feature classes.
+
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
+
+![](https://www.lucidchart.com/publicSegments/view/de4245bf-2ca4-4512-8165-4edbee306e3b/image.png)
 
 Information listed:
 * feature class name
@@ -11,20 +16,13 @@ Information listed:
 
 _Planned for development_
 
-* port to Python 3.6.5 and *ArcGIS Pro* 
+ 
 * how many records
 * does the data have M-values?
 * does the data have Z-values?
 * how many fields?
 * max field length > 10? (_thinking about shapefile export issues here_)
-
-&nbsp;&nbsp;&nbsp;&nbsp;_table structure_
-* field name
-* field alias
-* field type
-* field length
-* field precision (for float & double)
-* field scale (for float & double)
+* table structure (field name, alias, type, length, precision, scale)
 * is a domain defined?
 * count where the field value IS NULL
 * percent where the field value IS NULL
@@ -34,13 +32,11 @@ _Planned for development_
 * percent 'no data' records (NULL plus "")
 * does it contain unicode?
 * does it contain reserved characters (for Windows)?
-
-&nbsp;&nbsp;&nbsp;&nbsp;_for each field_
-
 * TOP 100 DISTINCT values ORDERED BY frequency DESC
 * TOP 100 DISTINCT values ORDERED BY value ASC
 * draw a histogram for numeric data
 * draw a pie chart for categorical data 
+* port to Python 3.6.5 and *ArcGIS Pro*
 &nbsp;
 
 ## Installation
@@ -101,7 +97,7 @@ This is fundamentally an excuse to learn:
 
 * It is expected that ```fc_properties.py``` will grow and another module ```field_properties.py ``` will contain code for profiling a single column.
 
-![](https://www.lucidchart.com/publicSegments/view/7aab42e8-1db0-453c-b386-60f582b84eb7/image.png)
+![](https://www.lucidchart.com/publicSegments/view/552e52aa-4b6d-4200-9a65-e5b96fc0b415/image.png)
 
 
 ## Git/GitHub workflow
