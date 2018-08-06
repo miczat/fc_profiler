@@ -1,11 +1,21 @@
 # -------------------------------------------
 # driver for developing xls_output
 # -------------------------------------------
-
-
 from xls_output import write_fc_properties
+import logging
 
 
+# simple logger setup
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+        '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+
+
+# driver
 
 data = [("Feature Class", "GDA94_polyline"),
        ("Parent fGDB", r"C:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"),
@@ -17,7 +27,6 @@ data = [("Feature Class", "GDA94_polyline"),
 
 xls_path = r"C:\tmp\dev.xls"
 
-print("writing...")
 print(write_fc_properties(data, xls_path))
 
 
