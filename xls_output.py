@@ -20,12 +20,13 @@ def write_fc_properties(data, xls_path):
     # write data
     log.debug("writing " + xls_path)
 
-    heading_style = xlwt.easyxf('font: bold 1')
+    heading_style = xlwt.easyxf('font:name Century Gothic, bold on')
+    data_style = xlwt.easyxf('font:name Consolas')
 
     row_num = 1
     for record in data:
         sheet.write(row_num, 1, record[0], heading_style)  # row, column, value
-        sheet.write(row_num, 2, record[1])  # row, column, value
+        sheet.write(row_num, 2, record[1], data_style)  # row, column, value
         row_num = row_num + 1
 
 

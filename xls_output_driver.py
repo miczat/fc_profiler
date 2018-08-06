@@ -15,7 +15,7 @@ data = [("Feature Class", "GDA94_polyline"),
        ("CRS Type", "Geographic"),
        ("CRS Units", "Degree")]
 
-xls_path=r"C:\tmp\dev.xls"
+xls_path = r"C:\tmp\dev.xls"
 
 print("writing...")
 print(write_fc_properties(data, xls_path))
