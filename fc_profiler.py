@@ -3,9 +3,9 @@
 #
 # description: Creates a profile of a feature class in an XLS file
 #
-# version      1.0
+# version      0.1
 # author       Mic Zatorsky
-# created      04/08/2018
+# created      06/08/2018
 #
 # documentation:  https://github.com/miczat/fc_profiler
 #
