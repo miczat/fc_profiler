@@ -9,34 +9,47 @@ Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data
 Information listed:
 * feature class name
 * parent GDB
-* coordinate system name
-* coordinate system EPSG/WKID
-* coordinate system type
-* coordinate system units
-
-_Planned for development_
-
+* coordinate system 
+    * name
+    * EPSG/WKID
+    * type
+    * units
  
-* how many records
+* record count
 * does the data have M-values?
 * does the data have Z-values?
 * how many fields?
 * max field length > 10? (_thinking about shapefile export issues here_)
-* table structure (field name, alias, type, length, precision, scale)
-* is a domain defined?
-* count where the field value IS NULL
-* percent where the field value IS NULL
-* count where the field value.strip() == ""
-* percent where the field value.strip() == ""
-* count 'no data' records (NULL plus "")  
-* percent 'no data' records (NULL plus "")
-* does it contain unicode?
-* does it contain reserved characters (for Windows)?
-* TOP 100 DISTINCT values ORDERED BY frequency DESC
-* TOP 100 DISTINCT values ORDERED BY value ASC
-* draw a histogram for numeric data
-* draw a pie chart for categorical data 
-* port to Python 3.6.5 and *ArcGIS Pro*
+* table structure
+    * field name
+    * alias
+    * type
+    * length
+    * precision
+    * scale
+    
+* for each field
+    * is a domain defined?
+    * count of records  where each field 
+        * IS NULL
+        * value.strip() == ""
+        * 'no data' records (NULL + value.strip() == "")
+
+    * percent of records where 
+        * field value IS NULL
+        * value.strip() == ""
+        * 'no data' records (NULL plus "")
+
+   * does it contain unicode?
+   * does it contain reserved characters (for Windows)?
+   * TOP 100 DISTINCT values ORDERED BY frequency DESC
+   * TOP 100 DISTINCT values ORDERED BY value ASC
+   * draw a histogram for numeric data
+   * draw a pie chart for categorical data 
+
+* port to, or make compatible with: 
+    * ArcGIS Pro and Python 3.6.5 
+    * ArcGIS 10.6.1 and Python 2.7.14
 &nbsp;
 
 ## Installation
@@ -68,7 +81,9 @@ _The python toolbox version_
 * filters input for points, polylines and polygons 
 
 ## Known bugs, issues & limitations
-* This has been developed and tested against ArcGIS versions 10.3 and 10.6
+* This has been developed and tested against
+    * ArcGIS version 10.3
+    * Python 2.7.14
 * Right now, it does not do much at all
 * It will run all profiles, until designed to do a subset
 * It will profile all fields, until designed to do a subset

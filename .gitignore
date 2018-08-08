@@ -4,8 +4,9 @@
 #vscode config
 .vscode/
 
-# virtualenv
-venv/
+# virtualenvs
+venv*/
+
 
 #other python
 pip-selfcheck.json
