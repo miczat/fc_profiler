@@ -114,3 +114,8 @@ class Testget_fc_M_values(TestCase):
         fc = "GDA94_point"
         fc_path = os.path.join(fgdb, fc)
         self.assertFalse(is_m_enabled(fc_path))
+
+class Testget_fc_record_counts(TestCase):
+
+    #to do - up to here
+    pass

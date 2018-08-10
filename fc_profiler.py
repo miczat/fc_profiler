@@ -1,14 +1,12 @@
+#!./venv_p27arcpy/Scripts/python.exe
+__author__ = "Mic Zatorsky"
+__copyright__ = "Copyright 2018, Michael Zatorsky "
+__license__ = "CC BT-SA 4.0"
+__version__ = "1.2.1"
+__date__ = "11/08/2018"
+
 # ----------------------------------------------------------------------------
-# name:        fc_profiler.py
-#
-# description: Creates a profile of a feature class in an XLS file
-#
-# version      0.1
-# author       Mic Zatorsky
-# created      06/08/2018
-#
 # documentation:  https://github.com/miczat/fc_profiler
-#
 # ----------------------------------------------------------------------------
 
 import logging
@@ -28,13 +26,17 @@ program_name = r"fc_profile"
 logfile_ext = ".log.csv"  # easier viewing in excel
 overwrite = True  # overwrite the existing output files
 
+
 # -----------------------------------------
 # create and configure the logger
 # -----------------------------------------
 
 
 def setup_logger(logfile):
-    """setup the logger"""
+    """
+    :param logfile: full path to where the log will be stored
+    :type logfile: basestring
+    """
 
     # log.setLevel(logging.INFO)
     log.setLevel(logging.DEBUG)
@@ -64,14 +66,14 @@ def setup_logger(logfile):
 
 # -----------------------------------------
 # get args
+#    positional arguments (no flags)
 # -----------------------------------------
 
 
 def parse_arguments():
     """
-    gets command line arguments
-    positional arguments (no flags)
-    :return: a tuple as (fc_path, out_folder)
+    :return: (fc_path, output folder)
+    :rtype tuple
     """
     parser = argparse.ArgumentParser(description="fc_profiler")
     parser.add_argument("fc_path", help="full path to the feature class")
@@ -80,18 +82,22 @@ def parse_arguments():
     return args.fc_path, args.out_folder
 
 
-# -----------------------------------------
+# ------------------------------------------------------------
 # validate inputs
-# -----------------------------------------
+#     pre: the input feature class exists
+#     pre: the output xls is somewhere that can be writen too
+#     post: retuen True, or exits the program
+
+# -----------------------------------------------------------
 
 
 def validate_inputs(fc_path, out_folder):
     """
     :param fc_path: - fully qualified path to the input feature class to profile
-    :param out_folder: - fully qualified path to the output xls to write
-    pre: the input feature class exists
-    pre: the output xls is somewhere that can be writen too
-    post: retuen True, or raise an exception
+    :type fc_path: basestring
+
+    :param out_folder: - fully qualified path to the output folder to write to
+    :type fc_path: basestring
     """
 
     # check that the input GDB exists
@@ -116,7 +122,11 @@ def validate_inputs(fc_path, out_folder):
 
 def main(fc_path, out_folder):
     """main
-    :param
+    :param fc_path: - fully qualified path to the input feature class to profile
+    :type fc_path: basestring
+
+    :param out_folder: - fully qualified path to the output folder to write to
+    :type fc_path: basestring
     """
 
     log.info("fc_profiler Start")

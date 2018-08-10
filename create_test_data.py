@@ -1,45 +1,25 @@
+#!./venv_p27arcpy/Scripts/python.exe
+__author__ = "Mic Zatorsky"
+__copyright__ = "Copyright 2018, Michael Zatorsky "
+__license__ = "CC BT-SA 4.0"
+__version__ = "1.2.0"
+__date__ = "11/08/2018"
+
 # ----------------------------------------------------------------------------
-# name:        create_test_data.py
-#
 # description: Creates a suite of file geodatabases for use with unit
 #              testing
+# created      11/08/2018
 #
-#             See fc_profiler_tests.xlsx for data requirements
-#
-#
-# version      1.1
-# author       Mic Zatorsky
-# created      8/08/2018
-#
-# param:       none
-#
-# pre:         install_folder exists and is writable
-#
-# return:      none
-#
-# post:        a set of file geodatabases are creates
-#
-# Run instructions:
-#     configure run config (globals)
-#     -
-#     -
-#
-# Issues and known limitations:
-#     -
-#     -
-#
-# Ref:
-#     url
-#      
+# Run instructions:  configure run config and execute
 # ----------------------------------------------------------------------------
 
-import arcpy
-from arcpy import env
 import logging
 import os
 import sys
 import shutil
 import datetime
+import arcpy
+from arcpy import env
 
 start_time = datetime.datetime.now()
 log = logging.getLogger()
@@ -51,7 +31,6 @@ program_name = r"create_test_data"
 log_folder = r"."
 install_folder = r"c:\tmp\fc_profiler_testdata"
 fgdb_name = "fc_profiler_test.gdb"
-fgdb_path = os.path.join(install_folder, fgdb_name)
 overwrite = True  # overwrite the existing test DB if it exists?
 
 
@@ -59,6 +38,7 @@ overwrite = True  # overwrite the existing test DB if it exists?
 # create and configure the logger
 # -----------------------------------------
 def setup_logger():
+    """setup logger"""
     logfile_ext = ".log.csv"
     logfile = os.path.join(log_folder, program_name + logfile_ext)
     log.setLevel(logging.DEBUG)
@@ -90,16 +70,21 @@ def setup_logger():
 
 # -----------------------------------------
 # create test file geodatabase
+#     create the empty test file geodatabase
+#     pre: install folder exists
+#     pre: fgdb_path exists
 # -----------------------------------------
 
 def create_fgdb_test(install_folder, fgdb_name):
     """
-    create the empty test file geodatabase
-    pre: fgdb_name exists
-    pre: fgdb_path exists
+    :param install_folder: the folder in which to create the GDB
+    :type install_folder: basestring
 
+    :param fgdb_name: the name of the fgdb, no path, with the .gdb extension
+    :type fgdb_name: basestring
+
+    :raises WindowsError: if the existing data cannot be overwritten
     """
-
 
     fgdb_path = os.path.join(install_folder, fgdb_name)
     log.debug("fgdb_path = " + fgdb_path)
@@ -111,6 +96,7 @@ def create_fgdb_test(install_folder, fgdb_name):
             shutil.rmtree(fgdb_path)
         except WindowsError as e:
             log.error("WindowsError: could not delete folder")
+            log.error("Check if the folder is being access by ArcMap or ArcCatalog")
             log.error(str(e).replace("\n", "; "))
             raise
         except Exception as e:
@@ -141,13 +127,15 @@ def create_fgdb_test(install_folder, fgdb_name):
 
 # -----------------------------------------
 # create_crs_fcs
+#     create a set of point feature classes in the test gdb
+#     pre: fgdb_name exists in install_folder
 # -----------------------------------------
 
 
 def create_crs_fcs(fgdb_path):
     """
-    create a set of point feature classes in the test gdb
-    pre: fgdb_name exists in install_folder
+    :param fgdb_path: file path to the file geodatabase
+    :type fgdb_path: basestring
     """
 
     geometry_type = "POINT"
@@ -178,24 +166,24 @@ def create_crs_fcs(fgdb_path):
                                         has_m='DISABLED',
                                         has_z='DISABLED')
 
-# -----------------------------------------
+# ----------------------------------------------------------------------
 # create_spatial_type_fcs
-# -----------------------------------------
+#     create a set of feature classes in the test gdb with the set of
+#        geometry types:
+#            POINT  (already created above)
+#            MULTIPATCH (not in this version supporting 10.3
+#            MULTIPOINT
+#            POLYGON
+#            POLYLINE
+#        pre: fgdb_name = "fc_profiler_test.gdb"
+#        pre: fgdb_name exists in install_folder
+# -------------------------------------------------------------------------
 
 
 def create_geometry_type_fcs(fgdb_path):
-    """create a set of feature classes in the test gdb with the set of
-       geometry types:
-           POINT  (already created above)
-           MULTIPOINT
-           POLYGON
-           POLYLINE
-       pre: fgdb_name = "fc_profiler_test.gdb"
-       pre: fgdb_name exists in install_folder
-
-       assumes "GDA94_point" already exists
-
-       MULTIPATCH is not supported in ArcGIS 10.3
+    """
+    :param fgdb_path: file path to the file geodatabase
+    :type fgdb_path: basestring
     """
 
     wkid = 4283 # GDA94 lat/long
@@ -222,19 +210,21 @@ def create_geometry_type_fcs(fgdb_path):
 
 # -----------------------------------------
 # create_Z_M_enabled
+#     create a set of feature class in the test gdb with:
+#
+#     Z only enabled
+#     M only enabled
+#     Z and M enabled
+#
+#     pre: fgdb_name = "fc_profiler_test.gdb"
+#     pre: fgdb_name exists in install_folder
 # -----------------------------------------
 
 
-def create_Z_M_enabled(fgdb_path):
+def create_z_m_enabled(fgdb_path):
     """
-    create a set of feature class in the test gdb with:
-
-    Z only enabled
-    M only enabled
-    Z and M enabled
-
-    pre: fgdb_name = "fc_profiler_test.gdb"
-    pre: fgdb_name exists in install_folder
+    :param  fgdb_path: file path to the file geodatabase
+    :type fgdb_path: basestring
     """
 
     # Z values only enabled
@@ -245,6 +235,7 @@ def create_Z_M_enabled(fgdb_path):
     has_z = "ENABLED"
     sr = arcpy.SpatialReference(wkid)
 
+    log.info("Creating FC with M enabled")
     arcpy.CreateFeatureclass_management(out_path=fgdb_path,
                                         out_name=out_name,
                                         geometry_type=geometry_type,
@@ -260,6 +251,7 @@ def create_Z_M_enabled(fgdb_path):
     has_z = "DISABLED"
     sr = arcpy.SpatialReference(wkid)
 
+    log.info("Creating FC with both Z enabled")
     arcpy.CreateFeatureclass_management(out_path=fgdb_path,
                                         out_name=out_name,
                                         geometry_type=geometry_type,
@@ -275,12 +267,65 @@ def create_Z_M_enabled(fgdb_path):
     has_z = "ENABLED"
     sr = arcpy.SpatialReference(wkid)
 
+    log.info("Creating FC with both Z and M enabled")
     arcpy.CreateFeatureclass_management(out_path=fgdb_path,
                                         out_name=out_name,
                                         geometry_type=geometry_type,
                                         has_m=has_m,
                                         has_z=has_z,
                                         spatial_reference=sr)
+
+
+# ---------------------------------------------------
+# Creating feature classes with varying record counts
+#     create the empty test file geodatabase
+#     pre: install folder exists
+#     pre: fgdb_path exists
+# ---------------------------------------------------
+
+def create_records(install_folder, fgdb_name):
+    """
+    :param install_folder: the folder to install the test data in
+    :type install_folder: basestring
+
+    :param fgdb_name: the name of the fgdb, no path, with the .gdb extension
+    :type fgdb_name: basestring
+    """
+    env.workspace = os.path.join(install_folder,fgdb_name)
+    env.outputCoordinateSystem = arcpy.SpatialReference(28356)  # MGA Zone 56
+    env.overwriteOutput = True
+
+    # Typical Case, 602 records
+    log.info("Creating polyline FC with 602 records")
+    fgdb_path = os.path.join(install_folder,fgdb_name,"MGAZ56_602_rec_polyline")
+    arcpy.CreateFishnet_management(out_feature_class=fgdb_path,
+                                   origin_coord='500000 6950000',
+                                   y_axis_coord='500000 6950100',
+                                   cell_width=100,
+                                   cell_height=100,
+                                   number_rows=300,
+                                   number_columns=300,
+                                   labels="NO_LABELS",
+                                   geometry_type="POLYLINE")
+
+    # Edge Case, 5 million records
+    log.info("Creating polygon and Point FCs with 5 million records")
+    fgdb_path = os.path.join(install_folder, fgdb_name, "MGAZ56_5_million_rec_polygon")
+    arcpy.CreateFishnet_management(out_feature_class=fgdb_path,
+                                   origin_coord='500000 6950000',
+                                   y_axis_coord='500000 6950100',
+                                   cell_width=100,
+                                   cell_height=100,
+                                   number_rows=2000,
+                                   number_columns=2500,
+                                   labels="LABELS",
+                                   geometry_type="POLYGON")
+
+    # rename the label points
+    arcpy.Rename_management(in_data="MGAZ56_5_million_rec_polygon_label",
+                            out_data="MGAZ56_5_million_rec_point",
+                            data_type="FeatureClass")
+
 
 # -----------------------------------------
 # main
@@ -290,6 +335,7 @@ def create_Z_M_enabled(fgdb_path):
 def main():
     """main"""
     log.info("Start")
+    fgdb_path = os.path.join(install_folder, fgdb_name)
 
     log.info("Creating empty file geodatabase fc_profiler_test.gdb")
     create_fgdb_test(install_folder, fgdb_name)
@@ -301,7 +347,10 @@ def main():
     create_geometry_type_fcs(fgdb_path)
 
     log.info("Creating feature classes with Z and M enabled")
-    create_Z_M_enabled(fgdb_path)
+    create_z_m_enabled(fgdb_path)
+
+    log.info("Creating feature classes with varying record counts")
+    create_records(install_folder, fgdb_name)
 
     log.info("Finished")
     end_time = datetime.datetime.now()
