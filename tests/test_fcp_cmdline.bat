@@ -1,8 +1,8 @@
 @echo off
 cls
 
-set python_exe=C:\Users\micza\OneDrive\code\py_arcpy\fc_profiler\venv\Scripts\python.exe
-set fc_profiler_py=C:\Users\micza\OneDrive\code\py_arcpy\fc_profiler\fc_profiler.py
+set python_exe=C:\Users\micza\OneDrive\code\py\fc_profiler\venv_p27arcpy\Scripts\python.exe
+set fc_profiler_py=C:\Users\micza\OneDrive\code\py\fc_profiler\fc_profiler.py
 
 
 echo # ------------------------------------------------------------------------

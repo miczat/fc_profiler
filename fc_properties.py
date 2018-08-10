@@ -25,7 +25,10 @@ def get_fc_properties(fc_path):
                           ("CRS Name", get_crs_name(fc_path)),
                           ("CRS EPSG WKID", get_crs_wkid(fc_path)),
                           ("CRS Type", get_crs_type(fc_path)),
-                          ("CRS Units", get_crs_units(fc_path))]
+                          ("CRS Units", get_crs_units(fc_path)),
+                          ("Has Z values?", str(is_z_enabled(fc_path))),
+                          ("Has m values?", str(is_m_enabled(fc_path)))
+                          ]
 
     if logging.getLevelName(log.getEffectiveLevel()) == "INFO":
         log.info("FC Properties List:")
@@ -124,3 +127,29 @@ def get_crs_units(fc_path):
         units = "Unknown"
     log.debug("get_crs_units returning: " + str(units))
     return units
+
+
+# -----------------------------------------
+# is_z_enabled
+# -----------------------------------------
+
+def is_z_enabled(fc_path):
+    """
+    :return True if the feature class has Z values enabled
+    """
+    result = arcpy.Describe(fc_path).hasZ
+    log.debug("is_z_enabled returning: " + str(result))
+    return result
+
+
+# -----------------------------------------
+# is_m_enabled
+# -----------------------------------------
+
+def is_m_enabled(fc_path):
+    """
+    :return True if the feature class has M values enabled
+    """
+    result = arcpy.Describe(fc_path).hasM
+    log.debug("is_m_enabled returning: " + str(result))
+    return result

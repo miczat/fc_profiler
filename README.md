@@ -4,7 +4,7 @@ This is a data interrogation tool for use with Esri ArcGIS feature classes.
 
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
-![](https://www.lucidchart.com/publicSegments/view/de4245bf-2ca4-4512-8165-4edbee306e3b/image.png)
+![](https://www.lucidchart.com/publicSegments/view/9eb06e12-0cc7-46c1-90e6-280c288729a1/image.png)
 
 Information listed:
 * feature class name
@@ -56,6 +56,18 @@ Information listed:
 Requires the python libraries that ship with Esri ArcGIS 10.3 or greater.
 &nbsp;
 
+### download
+
+1. ```fc_profiler``` (command line interface) 
+2. ```fc_profiler.pyt``` (ArcGIS Python Tool GUI)
+3. ```fc_profiler.FcProfiler.pyt.xml``` (ArcGIS Python Tool support file)
+4. ```fc_profiler.FcProfilerTool.pyt.xml``` (ArcGIS Python Tool support file)
+5. ```generate_profile.py``` (module)
+6. ```fc_properties.py``` (module)
+7. ```xls_output.py``` (module)
+
+
+
 ## Usage
 ```
 python fc_profiler.py <input_fc> <output_folder>
@@ -87,7 +99,9 @@ _The python toolbox version_
 * Right now, it does not do much at all
 * It will run all profiles, until designed to do a subset
 * It will profile all fields, until designed to do a subset
-&nbsp;
+* Default values of type ```FLOAT``` and ```DOUBLE``` may not be represented correctly.  AFAIK, it is impossible to know the actual precision and scale of a float.  e.g. If the default is ```1.3```, it could display as ```1.30000000000000004441``` unless you knew it only has a scale of 1, which unless there is metadata, you don't.   
+   
+
 
 ## Why?
 This is fundamentally an excuse to learn:

@@ -2,6 +2,8 @@ from unittest import TestCase
 from fc_properties import get_fc_gdb_path
 from fc_properties import get_fc_name
 from fc_properties import get_fc_geometry_type
+from fc_properties import is_z_enabled
+from fc_properties import is_m_enabled
 import os
 
 # self.assertEqual( <expected>, <actual>)
@@ -9,13 +11,11 @@ import os
 fgdb = r"C:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"
 
 
-
 class Testget_fc_gdb_path(TestCase):
 
     def test_get_fc_gdb_path_normal(self):
         fc_path = r"c:\tmp\test.gdb\featureclass"
         self.assertEqual(r"c:\tmp\test.gdb", get_fc_gdb_path(fc_path))
-
 
 
 class Testget_fc_name(TestCase):
@@ -58,10 +58,11 @@ class Testget_fc_geometry_type(TestCase):
         fc_path = os.path.join(fgdb, fc)
         self.assertEqual("Point", get_fc_geometry_type(fc_path))
 
-    def test_get_fc_geometry_type_multipatch(self):
-        fc = "GDA94_multipatch"
-        fc_path = os.path.join(fgdb, fc)
-        self.assertEqual("MultiPatch", get_fc_geometry_type(fc_path))
+    # not available in ArcGIS version 10.3
+    # def test_get_fc_geometry_type_multipatch(self):
+    #     fc = "GDA94_multipatch"
+    #     fc_path = os.path.join(fgdb, fc)
+    #     self.assertEqual("MultiPatch", get_fc_geometry_type(fc_path))
 
     def test_get_fc_geometry_type_multipoint(self):
         fc = "GDA94_multipoint"
@@ -77,3 +78,39 @@ class Testget_fc_geometry_type(TestCase):
         fc = "GDA94_polyline"
         fc_path = os.path.join(fgdb, fc)
         self.assertEqual("Polyline", get_fc_geometry_type(fc_path))
+
+
+class Testget_fc_Z_values(TestCase):
+
+    def test_is_fc_Z_enabled_does_have_z(self):
+        fc = "MGAZ56_has_Z_polyline"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertTrue(is_z_enabled(fc_path))
+
+    def test_is_fc_Z_enabled_has_z_and_m(self):
+        fc = "MGAZ56_has_Z_M_polyline"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertTrue(is_z_enabled(fc_path))
+
+    def test_is_fc_z_enabled_does_not_have_z(self):
+        fc = "GDA94_point"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertFalse(is_z_enabled(fc_path))
+
+
+class Testget_fc_M_values(TestCase):
+
+    def test_is_fc_M_enabled_does_have_m(self):
+        fc = "MGAZ56_has_M_polyline"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertTrue(is_m_enabled(fc_path))
+
+    def test_is_fc_M_enabled_has_z_and_m(self):
+        fc = "MGAZ56_has_Z_M_polyline"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertTrue(is_m_enabled(fc_path))
+
+    def test_is_fc_M_enabled_does_not_have_m(self):
+        fc = "GDA94_point"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertFalse(is_m_enabled(fc_path))
