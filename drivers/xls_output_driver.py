@@ -1,7 +1,7 @@
 # -------------------------------------------
 # driver for developing xls_output
 # -------------------------------------------
-from xls_output import write_fc_properties
+from xls_output import write_fc_profile
 import logging
 
 # simple logger setup
@@ -29,7 +29,7 @@ data = [("Feature Class", "GDA94_polyline"),
 
 xls_path = r"C:\tmp\dev.xls"
 
-print(write_fc_properties(data, xls_path))
+print(write_fc_profile(data, xls_path))
 
 
 

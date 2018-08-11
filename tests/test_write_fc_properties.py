@@ -1,5 +1,5 @@
 from unittest import TestCase
-from xls_output import write_fc_properties
+from xls_output import write_fc_profile
 import os
 import tempfile
 
@@ -36,7 +36,7 @@ class TestWrite_fc_properties(TestCase):
                               ("CRS Units", crs_units)]
 
         # the called function returns true
-        self.assertTrue(write_fc_properties(fc_properties_list, self.xls_path))
+        self.assertTrue(write_fc_profile(fc_properties_list, self.xls_path))
 
     def test_write_fc_properties_check_xls_file_written(self):
         """test normal writing of the xls"""
@@ -58,7 +58,7 @@ class TestWrite_fc_properties(TestCase):
                               ("CRS Units", crs_units)]
 
         # call function being tested
-        write_fc_properties(fc_properties_list, self.xls_path)
+        write_fc_profile(fc_properties_list, self.xls_path)
         self.assertTrue(os.path.exists(self.xls_path))
 
     #TODO - test content of file?

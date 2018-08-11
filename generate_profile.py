@@ -40,12 +40,6 @@ def delete_existing_xls(xls_path):
 # generate profile
 #     this is the main function that controls the profile generation
 #
-#     It is designed to be called by either the command line interface which has
-#     validated validated inputs, or a Python toolbox which has validated inputs
-#
-#     :param fc_path    - fully qualified path to the input feature class to profile
-#     :param out_folder - a writable folder
-#     :param overwrite  - a flag to identity if an existing XLS should be overwritten
 #     :pre the input feature class exists
 #     :pre the output folder has write access
 #     :post an xls file will be written
@@ -74,11 +68,12 @@ def generate_profile(fc_path, out_folder, overwrite):
     log.info("Getting feature class properties")
     fc_properties_list = fc_properties.get_fc_properties(fc_path)
 
-    log.info("Writing feature class properties to XLS")
-    xls_output.write_fc_properties(fc_properties_list, xls_path)
-
     log.info("Getting feature class structure")
     fc_structure = fc_properties.get_fc_structure(fc_path)
 
-    log.info("Writing feature class structure to XLS")
-    xls_output.write_fc_structure(fc_structure, xls_path)
+    log.info("Writing to XLS")
+    xls_output.write_fc_profile(fc_properties_list,
+                                fc_structure,
+                                xls_path)
+
+
