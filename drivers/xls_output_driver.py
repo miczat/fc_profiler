@@ -4,7 +4,6 @@
 from xls_output import write_fc_properties
 import logging
 
-
 # simple logger setup
 logger = logging.getLogger()
 handler = logging.StreamHandler()
@@ -14,9 +13,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-
 # driver
-
 data = [("Feature Class", "GDA94_polyline"),
        ("Parent fGDB", r"C:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"),
        ("Geometry Type", "Polyline"),
