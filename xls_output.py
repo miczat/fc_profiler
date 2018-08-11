@@ -14,7 +14,7 @@ def write_fc_properties(data, xls_path):
     """
 
     book = xlwt.Workbook()
-    sheet = book.add_sheet("fc_properties")
+    sheet = book.add_sheet("fc_properties", cell_overwrite_ok=True)
     cols = ["A", "B"]
 
     # define styles
@@ -25,9 +25,13 @@ def write_fc_properties(data, xls_path):
                                 'align: vert centre, horz left;')
     data_style = xlwt.easyxf('font:name Consolas bold off; align: vert centre, horz left')
 
-    log.debug("setting columm widths ")
+
+    # TODO: format numerical cells with commas
+
+
+    log.debug("setting columm widths")
     heading_column = sheet.col(1)
-    heading_column.width = 256 * 18  # approx 20 chars wide
+    heading_column.width = 256 * 18  # approx 20 chars
 
     data_column = sheet.col(2)
     data_column.width = 256 * 80  # approx 20 chars wide
@@ -43,7 +47,6 @@ def write_fc_properties(data, xls_path):
         sheet.write(row_num, 1, record[0], heading_style)  # row, column, value
         sheet.write(row_num, 2, record[1], data_style)  # row, column, value
         row_num = row_num + 1
-
 
     # save
     log.debug("saving " + xls_path)

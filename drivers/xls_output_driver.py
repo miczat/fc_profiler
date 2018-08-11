@@ -23,7 +23,12 @@ data = [("Feature Class", "GDA94_polyline"),
        ("CRS Name", "GCS_GDA_1994"),
        ("CRS EPSG WKID", 4283),
        ("CRS Type", "Geographic"),
-       ("CRS Units", "Degree")]
+       ("CRS Units", "Degree"),
+       ("Has Z values?",str(True)),
+       ("Has m values?", str(False)),
+       ("Total Records", '{:,}'.format(5000000000)),
+       ("Total Fields", 256)
+       ]
 
 xls_path = r"C:\tmp\dev.xls"
 

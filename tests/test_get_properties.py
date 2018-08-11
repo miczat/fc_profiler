@@ -5,6 +5,7 @@ from fc_properties import get_fc_geometry_type
 from fc_properties import is_z_enabled
 from fc_properties import is_m_enabled
 from fc_properties import get_fc_total_record_count
+from fc_properties import get_fc_field_count
 import os
 
 # self.assertEqual( <expected>, <actual>)
@@ -117,7 +118,7 @@ class Testget_fc_M_values(TestCase):
         self.assertFalse(is_m_enabled(fc_path))
 
 
-class Testget_fc_record_counts(TestCase):
+class Testget_fc_record_count(TestCase):
 
     def test_is_fc_zero_records(self):
         fc = "GDA94_point"
@@ -133,3 +134,17 @@ class Testget_fc_record_counts(TestCase):
         fc = "MGAZ56_5_million_rec_polygon"
         fc_path = os.path.join(fgdb, fc)
         self.assertEquals(5000000, get_fc_total_record_count(fc_path))
+
+
+class Testget_fc_field_count(TestCase):
+
+    def test_is_fc_two_records(self):
+        # two fields is the minimum expected in a new feature class
+        fc = "GDA94_GA_Lambert_point"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertEquals(2, get_fc_field_count(fc_path))
+
+    def test_is_fc_four_records(self):
+        fc = "MGAZ56_5_million_rec_polygon"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertEquals(4, get_fc_field_count(fc_path))

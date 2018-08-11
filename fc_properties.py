@@ -26,7 +26,9 @@ def get_fc_properties(fc_path):
                           ("CRS Type", get_crs_type(fc_path)),
                           ("CRS Units", get_crs_units(fc_path)),
                           ("Has Z values?", str(is_z_enabled(fc_path))),
-                          ("Has m values?", str(is_m_enabled(fc_path)))
+                          ("Has m values?", str(is_m_enabled(fc_path))),
+                          ("Total Records", '{:,}'.format(get_fc_total_record_count(fc_path))),
+                          ("Total Fields",str(get_fc_field_count(fc_path)))
                           ]
 
     if logging.getLevelName(log.getEffectiveLevel()) == "INFO":
@@ -213,6 +215,25 @@ def get_fc_total_record_count(fc_path):
                                    out_view=table_view)
     count = int(arcpy.GetCount_management(table_view).getOutput(0))
     arcpy.Delete_management(table_view)
-    log.debug("is_get_fc_record_count returning: " + str(count))
+    log.debug("get_fc_record_count returning: " + str(count))
 
+    return count
+
+
+# -----------------------------------------
+# get_fc_field_count
+# -----------------------------------------
+
+def get_fc_field_count(fc_path):
+    """
+    :param fc_path: fully qualified path to a feature class
+    :type fc_path: basestring
+
+    :return count: the field count for a feature class
+    :rtype result: int
+    """
+
+    fields = arcpy.ListFields(dataset=fc_path, field_type="All")
+    count = len(fields)
+    log.debug("get_fc_field_count returning: " + str(count))
     return count

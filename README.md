@@ -4,22 +4,25 @@ This is a data interrogation tool for use with Esri ArcGIS feature classes.
 
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
-![](https://www.lucidchart.com/publicSegments/view/9eb06e12-0cc7-46c1-90e6-280c288729a1/image.png)
+![](https://www.lucidchart.com/publicSegments/view/9d388008-44c7-41ac-822e-f4929daf74d4/image.png)
 
-Information listed:
+_implemented_
 * feature class name
 * parent GDB
-* coordinate system 
-    * name
-    * EPSG/WKID
-    * type
-    * units
- 
-* record count
+* coordinate system name
+* coordinate system name EPSG/WKID
+* coordinate system name type
+* coordinate system nameunits
 * does the data have M-values?
 * does the data have Z-values?
-* how many fields?
-* max field length > 10? (_thinking about shapefile export issues here_)
+* record count
+* fields count
+* max field length 
+
+&nbsp;
+
+_To do_
+
 * table structure
     * field name
     * alias
