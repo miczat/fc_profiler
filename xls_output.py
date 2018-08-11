@@ -32,9 +32,12 @@ def write_fc_properties(data, xls_path):
                                  'bold off, italic on, height 160;'
                                  'align: vert centre, horz left;')
 
+    xlwt.add_palette_colour("custom_colour", 0x21)
+    book.set_colour_RGB(0x21, 192, 192, 192)
     heading_style = xlwt.easyxf('font:name Century Gothic, '
                                 'bold on;'
-                                'align: vert centre, horz left;')
+                                'align: vert centre, horz left;'
+                                'pattern: pattern solid, fore_colour custom_colour')
 
     data_style = xlwt.easyxf('font:name Consolas, '
                              'bold off; '
