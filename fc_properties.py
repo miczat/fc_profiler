@@ -194,15 +194,13 @@ def is_m_enabled(fc_path):
 
 
 # -----------------------------------------
-# get_fc_record_count
+# get_fc_total_record_count
+#     no where clause, returns total rows
 # -----------------------------------------
 
-def get_fc_record_count(fc_path, where_clause):
+def get_fc_total_record_count(fc_path):
     """
     :param fc_path: fully qualified path to a feature class
-    :type fc_path: basestring
-
-    :param where: the where cluase
     :type fc_path: basestring
 
     :return count: the record count for a feature class
@@ -212,8 +210,7 @@ def get_fc_record_count(fc_path, where_clause):
     table_view = "count_rec_tblview"
     arcpy.Delete_management("count_rec_tblview")  #just in case it exists
     arcpy.MakeTableView_management(in_table=fc_path,
-                                   out_view=table_view,
-                                   where_clause=where_clause)
+                                   out_view=table_view)
     count = int(arcpy.GetCount_management(table_view).getOutput(0))
     arcpy.Delete_management(table_view)
     log.debug("is_get_fc_record_count returning: " + str(count))
