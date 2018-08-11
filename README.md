@@ -4,7 +4,10 @@ This is a data interrogation tool for use with Esri ArcGIS feature classes.
 
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
-![](https://www.lucidchart.com/publicSegments/view/6f31c6ac-0802-42c7-8e97-50103040c52c/image.png)
+<img src="https://www.lucidchart.com/publicSegments/view/6f31c6ac-0802-42c7-8e97-50103040c52c/image.png" height="400"/>
+
+
+&nbsp;
 
 _implemented_
 * feature class name
@@ -17,38 +20,42 @@ _implemented_
 * does the data have Z-values?
 * record count
 * fields count
-* max field name length  
 
 &nbsp;
 
-_To do_
+_to do_
 
 * table structure
     * field name
+    * max field name length
     * alias
     * type
     * length
     * precision
     * scale
+    * domain?
     
 * for each field
-    * is a domain defined?
-    * count of records  where each field 
+
+    * count of records with non-NULL or blank data
+    * percent of records with non-NULL or blank data
+    * count of records where each field 
         * IS NULL
         * value.strip() == ""
         * 'no data' records (NULL + value.strip() == "")
-
     * percent of records where 
         * field value IS NULL
         * value.strip() == ""
         * 'no data' records (NULL plus "")
+    * what is the defined domain
+    * what is domain of the recorded data
+    * TOP 100 DISTINCT values ORDERED BY frequency DESC
+    * TOP 100 DISTINCT values ORDERED BY value ASC
+    * draw a histogram for numeric data
+    * draw a pie chart for categorical data 
+    * does it contain unicode?
+    * does it contain reserved characters (for Windows)?
 
-   * does it contain unicode?
-   * does it contain reserved characters (for Windows)?
-   * TOP 100 DISTINCT values ORDERED BY frequency DESC
-   * TOP 100 DISTINCT values ORDERED BY value ASC
-   * draw a histogram for numeric data
-   * draw a pie chart for categorical data 
 
 * port to, or make compatible with: 
     * ArcGIS Pro and Python 3.6.5 
