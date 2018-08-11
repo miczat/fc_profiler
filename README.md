@@ -4,7 +4,7 @@ This is a data interrogation tool for use with Esri ArcGIS feature classes.
 
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
-![](https://www.lucidchart.com/publicSegments/view/9d388008-44c7-41ac-822e-f4929daf74d4/image.png)
+![](https://www.lucidchart.com/publicSegments/view/6f31c6ac-0802-42c7-8e97-50103040c52c/image.png)
 
 _implemented_
 * feature class name
@@ -17,7 +17,7 @@ _implemented_
 * does the data have Z-values?
 * record count
 * fields count
-* max field length 
+* max field name length  
 
 &nbsp;
 
