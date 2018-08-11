@@ -3,15 +3,20 @@ import logging
 import datetime
 log = logging.getLogger()
 
-# -----------------------------------------
-# Write to excel
-# -----------------------------------------
+# ---------------------------------------------------------
+# write_fc_properties
+# writes the feature class properties to a page in an XLS
+#     pre: the user has write permission to the output path
+# ---------------------------------------------------------
 
 def write_fc_properties(data, xls_path):
-    """"writes the feature class properties to a page in an XLS
-        :param data - a list of key, value pairs as a tuples [ (x,y), (x,y), ...]
-        :param xls_path - the full path of the xls file to write
-        pre: the xls file can be crated (user has write permission to folder)
+    """"
+    :param data: a list of (key, value) pairs
+    :type data: list of tuples
+
+    :param xls_path: the full path to the output xls file
+    :type   xls_path: basestring
+
     """
 
     book = xlwt.Workbook()
@@ -75,3 +80,43 @@ def write_fc_properties(data, xls_path):
     # if all went well
     return True
 
+
+
+def write_fc_structure(data, xls_path):
+    """"
+    :param data: a tuple of (headings, data)
+    :type data: tuple of (namedtuple,  list of namedtuples)
+
+    :param xls_path: the full path to the output xls file
+    :type   xls_path: basestring
+
+    """
+
+    # upack data
+    headings = data[0]
+    log.debug(str(len(headings)) + " headings")
+
+    log.debug("Headings:")
+    log.debug("--------------------------------")
+    for heading in headings:
+        log.debug(heading),
+    log.debug("--------------------------------")
+
+    rows = data[1]
+    log.debug("fields type = " + str(type(rows)))
+    log.debug(str(len(rows)) + " records in data")
+
+    for row in rows:
+        log.debug("")
+        log.debug("Name      = " + row.field_name)
+        log.debug("Width     = " + str(row.field_name_width))
+        log.debug("Alias     = " + row.field_alias)
+        log.debug("Type      = " + row.field_type)
+        log.debug("Precision = " + str(row.field_precision))
+        log.debug("Scale     = " + str(row.field_scale))
+        log.debug("Length    = " + str(row.field_length))
+        log.debug("Nullable  = " + str(row.field_is_nullable))
+        log.debug("Required  = " + str(row.field_is_required))
+        log.debug("Editable  = " + str(row.field_is_editable))
+
+  # TODO - write this to XLS

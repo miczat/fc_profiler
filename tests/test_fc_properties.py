@@ -1,4 +1,5 @@
 from unittest import TestCase
+import os
 from fc_properties import get_fc_gdb_path
 from fc_properties import get_fc_name
 from fc_properties import get_fc_geometry_type
@@ -6,21 +7,21 @@ from fc_properties import is_z_enabled
 from fc_properties import is_m_enabled
 from fc_properties import get_fc_total_record_count
 from fc_properties import get_fc_field_count
-import os
+
 
 # self.assertEqual( <expected>, <actual>)
 
 fgdb = r"C:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"
 
 
-class Testget_fc_gdb_path(TestCase):
+class TestGetFcGdbPath(TestCase):
 
     def test_get_fc_gdb_path_normal(self):
-        fc_path = r"c:\tmp\test.gdb\featureclass"
+        fc_path = r"c:\tmp\test.gdb\featureclass"  #this does not need to exist!
         self.assertEqual(r"c:\tmp\test.gdb", get_fc_gdb_path(fc_path))
 
 
-class Testget_fc_name(TestCase):
+class TestGetFcName(TestCase):
 
     def test_get_fc_name_GDA94_GA_Lambert(self):
         fc = "GDA94_GA_Lambert_point"
@@ -53,7 +54,7 @@ class Testget_fc_name(TestCase):
         self.assertEqual(fc, get_fc_name(fc_path))
 
 
-class Testget_fc_geometry_type(TestCase):
+class TestGetFcGeometryType(TestCase):
 
     def test_get_fc_geometry_type_point(self):
         fc = "GDA94_point"
@@ -82,7 +83,7 @@ class Testget_fc_geometry_type(TestCase):
         self.assertEqual("Polyline", get_fc_geometry_type(fc_path))
 
 
-class Testget_fc_Z_values(TestCase):
+class TestGetFcZvalues(TestCase):
 
     def test_is_fc_Z_enabled_does_have_z(self):
         fc = "MGAZ56_has_Z_polyline"
@@ -100,7 +101,7 @@ class Testget_fc_Z_values(TestCase):
         self.assertFalse(is_z_enabled(fc_path))
 
 
-class Testget_fc_M_values(TestCase):
+class TestGetFcMvalues(TestCase):
 
     def test_is_fc_M_enabled_does_have_m(self):
         fc = "MGAZ56_has_M_polyline"
@@ -118,7 +119,7 @@ class Testget_fc_M_values(TestCase):
         self.assertFalse(is_m_enabled(fc_path))
 
 
-class Testget_fc_record_count(TestCase):
+class TestGetFcRecordCount(TestCase):
 
     def test_is_fc_zero_records(self):
         fc = "GDA94_point"
@@ -136,7 +137,7 @@ class Testget_fc_record_count(TestCase):
         self.assertEquals(5000000, get_fc_total_record_count(fc_path))
 
 
-class Testget_fc_field_count(TestCase):
+class TestGetFcFieldCount(TestCase):
 
     def test_is_fc_two_records(self):
         # two fields is the minimum expected in a new feature class

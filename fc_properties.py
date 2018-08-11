@@ -1,15 +1,8 @@
-import arcpy
+import collections
 import logging
+import arcpy
 log = logging.getLogger()
 
-
-# -----------------------------------------------------------------
-# get_fc_properties
-#    this is the main function that controls the profile generation
-#    pre: the input feature class exists
-#    pre: the output xls is somewhere that can be writen too
-#    post: a xls file will be written
-# -----------------------------------------------------------------
 
 def get_fc_properties(fc_path):
     """
@@ -237,3 +230,64 @@ def get_fc_field_count(fc_path):
     count = len(fields)
     log.debug("get_fc_field_count returning: " + str(count))
     return count
+
+
+# -----------------------------------------
+# get_structure
+# -----------------------------------------
+
+def get_fc_structure(fc_path):
+    """
+    :param fc_path: fully qualified path to a feature class
+    :type fc_path: basestring
+
+    :return (headins, data)
+    :rtype (namedtuple, list of namedtuples)
+    """
+
+    # define the named tuple
+    Row = collections.namedtuple("Row", ["field_name",
+                                         "field_name_width",
+                                         "field_alias",
+                                         "field_type",
+                                         "field_precision",
+                                         "field_scale",
+                                         "field_length",
+                                         "field_is_nullable",
+                                         "field_is_required",
+                                         "field_is_editable"
+                                         ]
+                                 )
+
+    # create headings row
+    heading_row = Row(field_name="Name",
+                      field_name_width="Name field width",
+                      field_alias="Alias",
+                      field_type="Type",
+                      field_precision="Precision",
+                      field_scale="Scale",
+                      field_length="Length",
+                      field_is_nullable="is nullable?",
+                      field_is_required="is required?",
+                      field_is_editable="is editable?"
+                      )
+
+    log.debug('Getting structure from the feature class')
+    data_rows = []
+    field_list = arcpy.ListFields(dataset=fc_path, field_type="All")
+    for field in field_list:
+        # TODO add default values, subtypes, domains
+        data_rows.append(Row(field_name=field.baseName,
+                             field_name_width=len(field.baseName),
+                             field_alias=field.aliasName,
+                             field_type=field.type,
+                             field_precision=field.precision,
+                             field_scale=field.scale,
+                             field_length=field.length,
+                             field_is_nullable=str(field.isNullable),
+                             field_is_required=str(field.required),
+                             field_is_editable=str(field.editable)
+                             )
+                         )
+
+    return heading_row, data_rows

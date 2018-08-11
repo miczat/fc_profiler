@@ -74,6 +74,11 @@ def generate_profile(fc_path, out_folder, overwrite):
     log.info("Getting feature class properties")
     fc_properties_list = fc_properties.get_fc_properties(fc_path)
 
-    log.info("Writing XLS")
-    log.debug("xls_path = " + xls_path)
+    log.info("Writing feature class properties to XLS")
     xls_output.write_fc_properties(fc_properties_list, xls_path)
+
+    log.info("Getting feature class structure")
+    fc_structure = fc_properties.get_fc_structure(fc_path)
+
+    log.info("Writing feature class structure to XLS")
+    xls_output.write_fc_structure(fc_structure, xls_path)
