@@ -4,6 +4,7 @@ from fc_properties import get_fc_name
 from fc_properties import get_fc_geometry_type
 from fc_properties import is_z_enabled
 from fc_properties import is_m_enabled
+from fc_properties import get_fc_record_count
 import os
 
 # self.assertEqual( <expected>, <actual>)
@@ -115,7 +116,23 @@ class Testget_fc_M_values(TestCase):
         fc_path = os.path.join(fgdb, fc)
         self.assertFalse(is_m_enabled(fc_path))
 
+
 class Testget_fc_record_counts(TestCase):
 
-    #to do - up to here
-    pass
+    def test_is_fc_zero_records(self):
+        fc = "GDA94_point"
+        where_clause = "OBJECTID > 0"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertEquals(0, get_fc_record_count(fc_path, where_clause))
+
+    def test_is_fc_602_records(self):
+        fc = "MGAZ56_602_rec_polyline"
+        where_clause = "OID > 0"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertEquals(602, get_fc_record_count(fc_path, where_clause))
+
+    def test_is_fc_M_5_million_records(self):
+        fc = "MGAZ56_5_million_rec_polygon"
+        where_clause = "OID > 0"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertEquals(5000000, get_fc_record_count(fc_path, where_clause))

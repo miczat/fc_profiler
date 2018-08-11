@@ -191,3 +191,31 @@ def is_m_enabled(fc_path):
     result = arcpy.Describe(fc_path).hasM
     log.debug("is_m_enabled returning: " + str(result))
     return result
+
+
+# -----------------------------------------
+# get_fc_record_count
+# -----------------------------------------
+
+def get_fc_record_count(fc_path, where_clause):
+    """
+    :param fc_path: fully qualified path to a feature class
+    :type fc_path: basestring
+
+    :param where: the where cluase
+    :type fc_path: basestring
+
+    :return count: the record count for a feature class
+    :rtype result: int
+    """
+
+    table_view = "count_rec_tblview"
+    arcpy.Delete_management("count_rec_tblview")  #just in case it exists
+    arcpy.MakeTableView_management(in_table=fc_path,
+                                   out_view=table_view,
+                                   where_clause=where_clause)
+    count = int(arcpy.GetCount_management(table_view).getOutput(0))
+    arcpy.Delete_management(table_view)
+    log.debug("is_get_fc_record_count returning: " + str(count))
+
+    return count
