@@ -18,6 +18,7 @@ import os
 import sys
 import shutil
 import datetime
+import collections
 import arcpy
 from arcpy import env
 
@@ -291,7 +292,7 @@ def create_records(install_folder, fgdb_name):
     :param fgdb_name: the name of the fgdb, no path, with the .gdb extension
     :type fgdb_name: basestring
     """
-    env.workspace = os.path.join(install_folder,fgdb_name)
+    env.workspace = os.path.join(install_folder, fgdb_name)
     env.outputCoordinateSystem = arcpy.SpatialReference(28356)  # MGA Zone 56
     env.overwriteOutput = True
 
@@ -309,7 +310,7 @@ def create_records(install_folder, fgdb_name):
                                    geometry_type="POLYLINE")
 
     # Edge Case, 5 million records
-    log.info("Creating polygon and Point FCs with 5 million records")
+    log.info("Creating polygon and point FCs with 5 million records (can take 15 minutes")
     fgdb_path = os.path.join(install_folder, fgdb_name, "MGAZ56_5_million_rec_polygon")
     arcpy.CreateFishnet_management(out_feature_class=fgdb_path,
                                    origin_coord='500000 6950000',
@@ -327,11 +328,280 @@ def create_records(install_folder, fgdb_name):
                             data_type="FeatureClass")
 
 
+def create_field_types(fgdb_path):
+    """
+    :param  fgdb_path: file path to the file geodatabase
+    :type fgdb_path: basestring
+    """
+    arcpy.env.workspace = fgdb_path
+    arcpy.env.overwriteOutput = True
+
+    fc_name = "GDA94_all_field_types_polyline"
+    wkid = 4283 # GDA94 lat/long
+    geometry_type = "POLYLINE"
+    has_m = "DISABLED"
+    has_z = "DISABLED"
+    sr = arcpy.SpatialReference(wkid)
+
+    arcpy.CreateFeatureclass_management(out_path=fgdb_path,
+                                        out_name=fc_name,
+                                        geometry_type=geometry_type,
+                                        has_m=has_m,
+                                        has_z=has_z,
+                                        spatial_reference=sr)
+
+    Field = collections.namedtuple('Field', ['field_name',
+                                             'field_type',
+                                             'field_precision',
+                                             'field_scale',
+                                             'field_length',
+                                             'field_alias',
+                                             'field_is_nullable',
+                                             'field_is_required',
+                                             'field_domain'])
+
+    text_field = Field(field_name="text_field",
+                       field_type="TEXT",
+                       field_precision="",
+                       field_scale="",
+                       field_length="",
+                       field_alias="",
+                       field_is_nullable="NULLABLE",
+                       field_is_required="NON_REQUIRED",
+                       field_domain="")
+
+    float_field = Field(field_name="float_field",
+                        field_type="FLOAT",
+                        field_precision="10",
+                        field_scale="",
+                        field_length="",
+                        field_alias="",
+                        field_is_nullable="NULLABLE",
+                        field_is_required="NON_REQUIRED",
+                        field_domain="")
+
+    double_field = Field(field_name="double_field",
+                         field_type="DOUBLE",
+                         field_precision="",
+                         field_scale="2",
+                         field_length="",
+                         field_alias="",
+                         field_is_nullable="NULLABLE",
+                         field_is_required="NON_REQUIRED",
+                         field_domain="")
+
+    short_field = Field(field_name="short_field",
+                        field_type="SHORT",
+                        field_precision="",
+                        field_scale="",
+                        field_length="",
+                        field_alias="",
+                        field_is_nullable="NULLABLE",
+                        field_is_required="NON_REQUIRED",
+                        field_domain="")
+
+    long_field = Field(field_name="long_field",
+                       field_type="LONG",
+                       field_precision="",
+                       field_scale="",
+                       field_length="",
+                       field_alias="",
+                       field_is_nullable="NULLABLE",
+                       field_is_required="NON_REQUIRED",
+                       field_domain="")
+
+    date_field = Field(field_name="date_field",
+                       field_type="DATE",
+                       field_precision="",
+                       field_scale="",
+                       field_length="",
+                       field_alias="",
+                       field_is_nullable="NULLABLE",
+                       field_is_required="NON_REQUIRED",
+                       field_domain="")
+
+    blob_field = Field(field_name="blob_field",
+                       field_type="BLOB",
+                       field_precision="",
+                       field_scale="",
+                       field_length="",
+                       field_alias="",
+                       field_is_nullable="",
+                       field_is_required="NON_REQUIRED",
+                       field_domain="")
+
+    raster_field = Field(field_name="raster_field",
+                         field_type="RASTER",
+                         field_precision="",
+                         field_scale="",
+                         field_length="",
+                         field_alias="",
+                         field_is_nullable="NULLABLE",
+                         field_is_required="NON_REQUIRED",
+                         field_domain="")
+
+    guid_field = Field(field_name="guid_field",
+                       field_type="GUID",
+                       field_precision="",
+                       field_scale="",
+                       field_length="",
+                       field_alias="",
+                       field_is_nullable="NULLABLE",
+                       field_is_required="NON_REQUIRED",
+                       field_domain="")
+
+    text_field_non_nullable = Field(field_name="text_field_non_nullable",
+                                    field_type="TEXT",
+                                    field_precision="",
+                                    field_scale="",
+                                    field_length="",
+                                    field_alias="",
+                                    field_is_nullable="NON_NULLABLE",
+                                    field_is_required="NON_REQUIRED",
+                                    field_domain="")
+
+    short_field_required = Field(field_name="short_field_required",
+                                 field_type="SHORT",
+                                 field_precision="",
+                                 field_scale="",
+                                 field_length="",
+                                 field_alias="",
+                                 field_is_nullable="NULLABLE",
+                                 field_is_required="REQUIRED",
+                                 field_domain="")
+
+    guid_field_alias = Field(field_name="guid_field_alias",
+                             field_type="GUID",
+                             field_precision="",
+                             field_scale="",
+                             field_length="",
+                             field_alias="Globally Unique ID",
+                             field_is_nullable="NULLABLE",
+                             field_is_required="NON_REQUIRED",
+                             field_domain="")
+
+    date_field_non_nullable_required_alias = Field(field_name="date_field_non_nullable_required",
+                                                   field_type="DATE",
+                                                   field_precision="",
+                                                   field_scale="",
+                                                   field_length="",
+                                                   field_alias="Required non-null date",
+                                                   field_is_nullable="NULLABLE",
+                                                   field_is_required="REQUIRED",
+                                                   field_domain="")
+
+    float_field_default_value = Field(field_name="float_field_default_value",
+                                      field_type="FLOAT",
+                                      field_precision="",
+                                      field_scale="",
+                                      field_length="",
+                                      field_alias="",
+                                      field_is_nullable="NULLABLE",
+                                      field_is_required="NON_REQUIRED",
+                                      field_domain="")
+
+    double_field_default_value = Field(field_name="double_field_default_value",
+                                       field_type="DOUBLE",
+                                       field_precision="",
+                                       field_scale="",
+                                       field_length="",
+                                       field_alias="",
+                                       field_is_nullable="NULLABLE",
+                                       field_is_required="NON_REQUIRED",
+                                       field_domain="")
+
+    text_field_default_value = Field(field_name="text_field_default_value",
+                                     field_type="TEXT",
+                                     field_precision="",
+                                     field_scale="",
+                                     field_length="26",
+                                     field_alias="",
+                                     field_is_nullable="NULLABLE",
+                                     field_is_required="NON_REQUIRED",
+                                     field_domain="")
+
+    short_field_default_value = Field(field_name="short_field_default_value",
+                                      field_type="SHORT",
+                                      field_precision="",
+                                      field_scale="",
+                                      field_length="",
+                                      field_alias="",
+                                      field_is_nullable="NULLABLE",
+                                      field_is_required="NON_REQUIRED",
+                                      field_domain="")
+
+    date_field_default_value = Field(field_name="date_field_default_value",
+                                     field_type="DATE",
+                                     field_precision="",
+                                     field_scale="",
+                                     field_length="",
+                                     field_alias="",
+                                     field_is_nullable="NULLABLE",
+                                     field_is_required="NON_REQUIRED",
+                                     field_domain="")
+
+    fields_list = [text_field,
+                   float_field,
+                   double_field,
+                   short_field,
+                   long_field,
+                   date_field,
+                   blob_field,
+                   raster_field,
+                   guid_field,
+                   text_field_non_nullable,
+                   short_field_required,
+                   guid_field_alias,
+                   date_field_non_nullable_required_alias,
+                   float_field_default_value,
+                   double_field_default_value,
+                   text_field_default_value,
+                   short_field_default_value,
+                   date_field_default_value
+                   ]
+
+    log.info(str(len(fields_list)) + " fields defined")
+
+    for field in fields_list:
+        log.info("adding field " + field.field_name)
+        arcpy.AddField_management(fc_name,
+                                  field.field_name,
+                                  field.field_type,
+                                  field.field_precision,
+                                  field.field_scale,
+                                  field.field_length,
+                                  field.field_alias,
+                                  field.field_is_nullable,
+                                  field.field_is_required,
+                                  field.field_domain)
+
+    arcpy.AssignDefaultToField_management(in_table=fc_name,
+                                          field_name="float_field_default_value",
+                                          default_value=123.456
+                                          )
+
+    arcpy.AssignDefaultToField_management(in_table=fc_name,
+                                          field_name="double_field_default_value",
+                                          default_value=1234567890.012345
+                                          )
+
+    arcpy.AssignDefaultToField_management(in_table=fc_name,
+                                          field_name="text_field_default_value",
+                                          default_value="abcdefghijklmnopqrstuvwxyz")
+
+    arcpy.AssignDefaultToField_management(in_table=fc_name,
+                                          field_name="short_field_default_value",
+                                          default_value=5)
+
+    arcpy.AssignDefaultToField_management(in_table=fc_name,
+                                          field_name="date_field_default_value",
+                                          default_value="10-08-2018 10:06:55 PM")
+
+
 # -----------------------------------------
 # main
 # -----------------------------------------
-
-
+define
 def main():
     """main"""
     log.info("Start")
@@ -351,6 +621,9 @@ def main():
 
     log.info("Creating feature classes with varying record counts")
     create_records(install_folder, fgdb_name)
+
+    log.info("Creating feature classes with all field types and configurations")
+    create_field_types(fgdb_path)
 
     log.info("Finished")
     end_time = datetime.datetime.now()

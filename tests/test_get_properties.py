@@ -148,3 +148,8 @@ class Testget_fc_field_count(TestCase):
         fc = "MGAZ56_5_million_rec_polygon"
         fc_path = os.path.join(fgdb, fc)
         self.assertEquals(4, get_fc_field_count(fc_path))
+
+    def test_many_records(self):
+        fc = "GDA94_all_field_types_polyline"
+        fc_path = os.path.join(fgdb, fc)
+        self.assertEquals(21, get_fc_field_count(fc_path))
