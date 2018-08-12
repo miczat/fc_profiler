@@ -106,7 +106,7 @@ _The python toolbox version_
 * all fields are profiles, until designed to do a subset.
 * Default values for fields of type ```FLOAT``` and ```DOUBLE``` may not be represented correctly.  AFAIK, it is impossible to know the actual precision and scale of a float.  For example, if the default value of a float is configure as ```1.3```, it could display as ```1.30000000000000004441``` unless you knew it only has a scale of 1, which unless there is metadata, you don't.
 * the ```xlwt``` library is the only xls-writing lbrary available in ArcGIS 10.3.  Future versions can be refactored to use ```openpyxl``` 
-*  ```xlwt``` it cannot edit existing    
+*  ```xlwt``` it cannot edit existing xls files.  It must write the entire file in one pass, so thats what this does.    
    
 
 
