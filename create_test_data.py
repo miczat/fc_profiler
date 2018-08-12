@@ -372,7 +372,7 @@ def create_field_types(fgdb_path):
 
     float_field = Field(field_name="float_field",
                         field_type="FLOAT",
-                        field_precision="10",
+                        field_precision="",
                         field_scale="",
                         field_length="",
                         field_alias="",
@@ -383,7 +383,7 @@ def create_field_types(fgdb_path):
     double_field = Field(field_name="double_field",
                          field_type="DOUBLE",
                          field_precision="",
-                         field_scale="2",
+                         field_scale="",
                          field_length="",
                          field_alias="",
                          field_is_nullable="NULLABLE",
@@ -598,10 +598,304 @@ def create_field_types(fgdb_path):
                                           default_value="10-08-2018 10:06:55 PM")
 
 
+def create_fc_fields_with_domains(fgdb_path):
+    """
+    :param  fgdb_path: file path to the file geodatabase
+    :type fgdb_path: basestring
+    """
+    arcpy.env.workspace = fgdb_path
+    arcpy.env.overwriteOutput = True
+
+    # ---------------------------------------------------------------
+    # define domains
+    #
+    # pattern:
+    #
+    #    for coded domains
+    #        create a domain object _in the GDB_ (not as a Python object)
+    #        create a dictionary of domain code:description pairs
+    #        load the dictionary into the domain
+    #        use the domain when creating a feature class or use
+    #            arcpy.AssignDomainToField_management()
+    #
+    #    for range domains
+    #        create a domain object _in the GDB_ (not as a Python object)
+    #        set SetValueForRangeDomain_management
+    #        use the domain when creating a feature class or use
+    #            arcpy.AssignDomainToField_management()
+    #
+    # --------------------------------------------------------------
+
+    log.info("Creating feature class")
+    fc_name = "GDA94_fields_with_domains_polyline"
+    fc_path = os.path.join(fgdb_path, fc_name)
+
+    arcpy.CreateFeatureclass_management(out_path=fgdb_path,
+                                        out_name=fc_name,
+                                        geometry_type="POLYLINE",
+                                        spatial_reference=arcpy.SpatialReference(4283))  # GDA94 lat/long)
+
+    log.info("Creating domains")
+    # --------------------------------------
+    domain_name = "text_field_coded_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a coded TEXT domain",
+                                  field_type="TEXT",
+                                  domain_type="CODED")
+
+    text_field_coded_domain_dict = {"R": "Red",
+                                    "G": "Green",
+                                    "B": "Blue"}
+
+    for code in text_field_coded_domain_dict:
+        arcpy.AddCodedValueToDomain_management(in_workspace=fgdb_path,
+                                               domain_name=domain_name,
+                                               code=code,
+                                               code_description=text_field_coded_domain_dict[code])
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="text_field_with_coded_domain",
+                              field_type="TEXT",
+                              field_length=50,
+                              field_alias="has a TEXT coded domain",
+                              field_domain="text_field_coded_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "float_field_coded_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a coded FLOAT domain",
+                                  field_type="FLOAT",
+                                  domain_type="CODED")
+
+    float_field_coded_domain_dict = {1.1: "one decimal place",
+                                     1.01: "two decimal places",
+                                     1.001: "three decimal places"}
+
+    for code in float_field_coded_domain_dict:
+        arcpy.AddCodedValueToDomain_management(in_workspace=fgdb_path,
+                                               domain_name=domain_name,
+                                               code=code,
+                                               code_description=float_field_coded_domain_dict[code])
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="float_field_with_coded_domain",
+                              field_type="FLOAT",
+                              field_alias="has a FLOAT coded domain",
+                              field_domain="float_field_coded_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "float_field_range_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a FLOAT range domain",
+                                  field_type="FLOAT",
+                                  domain_type="RANGE")
+
+    arcpy.SetValueForRangeDomain_management(in_workspace=fgdb_path,
+                                            domain_name=domain_name,
+                                            min_value=1.1,
+                                            max_value=2.2)
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="float_field_with_range_domain",
+                              field_type="FLOAT",
+                              field_alias="has a FLOAT range domain",
+                              field_domain="float_field_range_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "double_field_coded_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a coded DOUBLE domain",
+                                  field_type="DOUBLE",
+                                  domain_type="CODED")
+
+    double_field_coded_domain_dict = {2.2: "one decimal place",
+                                     2.00000000001: "10 decimal places",
+                                     2.00000000000000000002: "20 decimal places"}
+
+    for code in double_field_coded_domain_dict:
+        arcpy.AddCodedValueToDomain_management(in_workspace=fgdb_path,
+                                               domain_name=domain_name,
+                                               code=code,
+                                               code_description=double_field_coded_domain_dict[code])
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="double_field_with_coded_domain",
+                              field_type="DOUBLE",
+                              field_alias="has a DOUBLE coded domain",
+                              field_domain="double_field_coded_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "double_field_range_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a DOUBLE range domain",
+                                  field_type="DOUBLE",
+                                  domain_type="RANGE")
+
+    arcpy.SetValueForRangeDomain_management(in_workspace=fgdb_path,
+                                            domain_name=domain_name,
+                                            min_value=1.00000000000000000001,
+                                            max_value=20000000000000000000.2)
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="double_field_with_range_domain",
+                              field_type="DOUBLE",
+                              field_alias="has a DOUBLE range domain",
+                              field_domain="double_field_range_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "short_field_coded_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a coded SHORT domain",
+                                  field_type="SHORT",
+                                  domain_type="CODED")
+
+    short_field_coded_domain_dict = {101: "one O one",
+                                      102: "one O two",
+                                      103: "one O three"}
+
+    for code in short_field_coded_domain_dict:
+        arcpy.AddCodedValueToDomain_management(in_workspace=fgdb_path,
+                                               domain_name=domain_name,
+                                               code=code,
+                                               code_description=short_field_coded_domain_dict[code])
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="short_field_with_coded_domain",
+                              field_type="SHORT",
+                              field_alias="has a SHORT coded domain",
+                              field_domain="short_field_coded_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "short_field_range_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a SHORT range domain",
+                                  field_type="SHORT",
+                                  domain_type="RANGE")
+
+    arcpy.SetValueForRangeDomain_management(in_workspace=fgdb_path,
+                                            domain_name=domain_name,
+                                            min_value=1000,
+                                            max_value=2000)
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="short_field_with_range_domain",
+                              field_type="SHORT",
+                              field_alias="has a SHORT range domain",
+                              field_domain="short_field_range_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "long_field_coded_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a coded LONG domain",
+                                  field_type="LONG",
+                                  domain_type="CODED")
+
+    long_field_coded_domain_dict = {40000: "forty thousand",
+                                     400000: "four hundred thousand",
+                                     4000000: "four million"}
+
+    for code in long_field_coded_domain_dict:
+        arcpy.AddCodedValueToDomain_management(in_workspace=fgdb_path,
+                                               domain_name=domain_name,
+                                               code=code,
+                                               code_description=
+                                               long_field_coded_domain_dict[code])
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="long_field_with_coded_domain",
+                              field_type="LONG",
+                              field_alias="has a LONG coded domain",
+                              field_domain="long_field_coded_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "long_field_range_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a LONG range domain",
+                                  field_type="LONG",
+                                  domain_type="RANGE")
+
+    arcpy.SetValueForRangeDomain_management(in_workspace=fgdb_path,
+                                            domain_name=domain_name,
+                                            min_value=12000000,
+                                            max_value=120000000)
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="long_field_with_range_domain",
+                              field_type="LONG",
+                              field_alias="has a LONG range domain",
+                              field_domain="long_field_range_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "date_field_coded_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a coded DATE domain",
+                                  field_type="DATE",
+                                  domain_type="CODED")
+
+    date_field_coded_domain_dict = {"01-02-1972": "Mic's Birthday",
+                                    "09-08-1969": "Donna's Birthday",
+                                    "22-04-2002": "Annie's Birthday"}
+
+    for code in date_field_coded_domain_dict:
+        arcpy.AddCodedValueToDomain_management(in_workspace=fgdb_path,
+                                               domain_name=domain_name,
+                                               code=code,
+                                               code_description=
+                                               date_field_coded_domain_dict[code])
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="date_field_with_coded_domain",
+                              field_type="DATE",
+                              field_alias="has a DATE coded domain",
+                              field_domain="date_field_coded_domain")
+
+    # -----------------------------------------------------------------------------------
+
+    domain_name = "date_field_range_domain"
+    arcpy.CreateDomain_management(in_workspace=fgdb_path,
+                                  domain_name=domain_name,
+                                  domain_description="uses a DATE range domain",
+                                  field_type="DATE",
+                                  domain_type="RANGE")
+
+    arcpy.SetValueForRangeDomain_management(in_workspace=fgdb_path,
+                                            domain_name=domain_name,
+                                            min_value="01-01-1972",
+                                            max_value="22-04-2002")
+
+    arcpy.AddField_management(in_table=fc_path,
+                              field_name="date_field_with_range_domain",
+                              field_type="DATE",
+                              field_alias="has a DATE range domain",
+                              field_domain="date_field_range_domain")
+
+    # -----------------------------------------------------------------------------------
+
+
 # -----------------------------------------
 # main
 # -----------------------------------------
-define
+
+
 def main():
     """main"""
     log.info("Start")
@@ -624,6 +918,9 @@ def main():
 
     log.info("Creating feature classes with all field types and configurations")
     create_field_types(fgdb_path)
+
+    log.info("Create feature classes with domains")
+    create_fc_fields_with_domains(fgdb_path)
 
     log.info("Finished")
     end_time = datetime.datetime.now()
