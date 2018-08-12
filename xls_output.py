@@ -24,6 +24,8 @@ def write_fc_profile(fc_property_data,
 
     """
 
+    book = xlwt.Workbook()
+
     # ----------------------------------
     # define styles
     # ----------------------------------
@@ -42,92 +44,93 @@ def write_fc_profile(fc_property_data,
                                 'align: vert centre, horz left;'
                                 'pattern: pattern solid, fore_colour custom_colour')
 
-    data_style = xlwt.easyxf('font:name Consolas, '
-                             'bold off; '
-                             'align: vert centre, horz left')
+    data_style_aligned_left = xlwt.easyxf('font:name Consolas, '
+                                          'bold off; '
+                                          'align: vert centre, horz left')
+
+    data_style_aligned_centre = xlwt.easyxf('font:name Consolas, '
+                                            'bold off; '
+                                            'align: vert centre, horz centre')
+
+    book.set_colour_RGB(0x21, 250, 250, 250)  # light slate grey
 
     # ----------------------------------
     # Write FC properties
     # ----------------------------------
-    book = xlwt.Workbook()
-    sheet1 = book.add_sheet("fc_properties", cell_overwrite_ok=True)
+    log.info("writing sheet_fc_properties")
+    sheet_fc_properties = book.add_sheet("fc_properties", cell_overwrite_ok=True)
 
-    book.set_colour_RGB(0x21, 250, 250, 250)  # light slate grey
-
-    log.debug("Setting columm widths")
-    heading_column = sheet1.col(1)
-    heading_column.width = 256 * 18  # approx 20 chars
-
-    data_column = sheet1.col(2)
-    data_column.width = 256 * 80  # approx 20 chars wide
+    # set column widths
+    sheet_fc_properties.col(1).width = 256 * 18  # headings
+    sheet_fc_properties.col(2).width = 256 * 80  # properties
 
     # write title
-    log.debug("writing title")
-    title = "Feature Class Profile"
-    sheet1.write(1, 1, title, title_style)
+    title = "Feature Class Properties"
+    sheet_fc_properties.write(1, 1, title, title_style)
 
-    # write subtitle title
-    log.debug("Writing subtitle")
+    # write sub-title
     now = datetime.datetime.now()
     now = now.replace(second=int(round(now.second, 0)), microsecond=0)
     now = now.strftime("%d-%m-%Y %H:%M:%S")
     subtitle = "Generated on " + now
-    sheet1.write(2, 1, subtitle, subtitle_style)
+    sheet_fc_properties.write(2, 1, subtitle, subtitle_style)
 
-    # write fc_property_data
+    # write headings and data
     log.debug("Writing fc_property_data")
     row_num = 4  # start on row 5
     for record in fc_property_data:
-        sheet1.write(row_num, 1, record[0], heading_style)  # row, column, value
-        sheet1.write(row_num, 2, record[1], data_style)  # row, column, value
+        sheet_fc_properties.write(row_num, 1, record[0], heading_style)  # row, column, value
+        sheet_fc_properties.write(row_num, 2, record[1], data_style_aligned_left)  # row, column, value
         row_num = row_num + 1
 
     # ----------------------------------
     # FC Structure / field properties
     # ----------------------------------
+    log.info("writing sheet_fc_structure")
+    sheet_fc_structure = book.add_sheet("fc_structure", cell_overwrite_ok=True)
 
-    sheet2 = book.add_sheet("fc_structure", cell_overwrite_ok=True)
+    # set column widths
+    sheet_fc_structure.col(1).width = 256 * 35   # name
+    sheet_fc_structure.col(2).width = 256 * 16   # name field len
+    sheet_fc_structure.col(3).width = 256 * 30   # alias
+    sheet_fc_structure.col(4).width = 256 * 14   # type
+    sheet_fc_structure.col(5).width = 256 * 8    # length
+    sheet_fc_structure.col(6).width = 256 * 10   # precision
+    sheet_fc_structure.col(7).width = 256 * 7    # scale
+    sheet_fc_structure.col(8).width = 256 * 12   # is nullable
+    sheet_fc_structure.col(9).width = 256 * 12   # is required
+    sheet_fc_structure.col(10).width = 256 * 12  # is editable
 
     # write title
-    log.debug("writing sheet 2 title")
     title = "Feature Class Structure"
-    sheet2.write(1, 1, title, title_style)
+    sheet_fc_structure.write(1, 1, title, title_style)
 
-
-    # upack fc_structure
+    # write headings
     headings = fc_structure[0]
     log.debug(str(len(headings)) + " headings")
-
-    log.debug("Headings:")
-    log.debug("--------------------------------")
+    row = 4  # heading row
+    col = 1  # starting column
     for heading in headings:
-        log.debug(heading),
-    log.debug("--------------------------------")
-
-    row = 4
-    col = 1
-    for heading in headings:
-        sheet2.write(row, col, heading, heading_style)
+        sheet_fc_structure.write(row, col, heading, heading_style)
         col = col + 1
 
-    rows = fc_structure[1]
-    log.debug("fields type = " + str(type(rows)))
-    log.debug(str(len(rows)) + " records in fc_structure")
-
-    for row in rows:
-        log.debug("")
-        log.debug("Name      = " + row.field_name)
-        log.debug("Width     = " + str(row.field_name_width))
-        log.debug("Alias     = " + row.field_alias)
-        log.debug("Type      = " + row.field_type)
-        log.debug("Precision = " + str(row.field_precision))
-        log.debug("Scale     = " + str(row.field_scale))
-        log.debug("Length    = " + str(row.field_length))
-        log.debug("Nullable  = " + str(row.field_is_nullable))
-        log.debug("Required  = " + str(row.field_is_required))
-        log.debug("Editable  = " + str(row.field_is_editable))
-
-    # TODO - write this to XLS
+    # write data
+    structure_records = fc_structure[1]
+    log.debug(str(len(structure_records)) + " records in fc_structure")
+    row = 5  # starting row
+    col = 1  # starting column
+    for record in structure_records:
+        sheet_fc_structure.write(row, col, record.field_name, data_style_aligned_left)
+        sheet_fc_structure.write(row, col+1, record.field_name_len, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+2, record.field_alias, data_style_aligned_left)
+        sheet_fc_structure.write(row, col+3, record.field_type, data_style_aligned_left)
+        sheet_fc_structure.write(row, col+4, record.field_length, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+5, record.field_precision, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+6, record.field_scale, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+7, record.field_is_nullable, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+8, record.field_is_required, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+9, record.field_is_editable, data_style_aligned_centre)
+        row = row + 1
 
     # ----------------------------------
     # save
@@ -144,41 +147,3 @@ def write_fc_profile(fc_property_data,
     return True
 
 
-def write_fc_structure(fc_structure, xls_path):
-    """"
-    :param fc_structure: a tuple of (headings, data)
-    :type fc_structure: tuple of (namedtuple,  list of namedtuples)
-
-    :param xls_path: the full path to the output xls file
-    :type   xls_path: basestring
-
-    """
-
-    # upack fc_structure
-    headings = fc_structure[0]
-    log.debug(str(len(headings)) + " headings")
-
-    log.debug("Headings:")
-    log.debug("--------------------------------")
-    for heading in headings:
-        log.debug(heading),
-    log.debug("--------------------------------")
-
-    rows = fc_structure[1]
-    log.debug("fields type = " + str(type(rows)))
-    log.debug(str(len(rows)) + " records in fc_structure")
-
-    for row in rows:
-        log.debug("")
-        log.debug("Name      = " + row.field_name)
-        log.debug("Width     = " + str(row.field_name_width))
-        log.debug("Alias     = " + row.field_alias)
-        log.debug("Type      = " + row.field_type)
-        log.debug("Precision = " + str(row.field_precision))
-        log.debug("Scale     = " + str(row.field_scale))
-        log.debug("Length    = " + str(row.field_length))
-        log.debug("Nullable  = " + str(row.field_is_nullable))
-        log.debug("Required  = " + str(row.field_is_required))
-        log.debug("Editable  = " + str(row.field_is_editable))
-
-  # TODO - write this to XLS

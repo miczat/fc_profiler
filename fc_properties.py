@@ -247,12 +247,12 @@ def get_fc_structure(fc_path):
 
     # define the named tuple
     Row = collections.namedtuple("Row", ["field_name",
-                                         "field_name_width",
+                                         "field_name_len",
                                          "field_alias",
                                          "field_type",
+                                         "field_length",
                                          "field_precision",
                                          "field_scale",
-                                         "field_length",
                                          "field_is_nullable",
                                          "field_is_required",
                                          "field_is_editable"
@@ -261,12 +261,12 @@ def get_fc_structure(fc_path):
 
     # create headings row
     heading_row = Row(field_name="Name",
-                      field_name_width="Name field width",
+                      field_name_len="Name field len",
                       field_alias="Alias",
                       field_type="Type",
+                      field_length="Length",
                       field_precision="Precision",
                       field_scale="Scale",
-                      field_length="Length",
                       field_is_nullable="is nullable?",
                       field_is_required="is required?",
                       field_is_editable="is editable?"
@@ -278,12 +278,12 @@ def get_fc_structure(fc_path):
     for field in field_list:
         # TODO add default values, subtypes, domains
         data_rows.append(Row(field_name=field.baseName,
-                             field_name_width=len(field.baseName),
+                             field_name_len=len(field.baseName),
                              field_alias=field.aliasName,
                              field_type=field.type,
+                             field_length=field.length,
                              field_precision=field.precision,
                              field_scale=field.scale,
-                             field_length=field.length,
                              field_is_nullable=str(field.isNullable),
                              field_is_required=str(field.required),
                              field_is_editable=str(field.editable)
