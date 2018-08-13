@@ -46,7 +46,8 @@ class TestWrite_fc_properties(TestCase):
                                              "field_scale",
                                              "field_is_nullable",
                                              "field_is_required",
-                                             "field_is_editable"
+                                             "field_is_editable",
+                                             "field_domain"
                                              ]
                                      )
 
@@ -60,7 +61,8 @@ class TestWrite_fc_properties(TestCase):
                           field_scale="Scale",
                           field_is_nullable="is nullable?",
                           field_is_required="is required?",
-                          field_is_editable="is editable?"
+                          field_is_editable="is editable?",
+                          field_domain="Domain Name"
                           )
 
         # create a data row
@@ -74,7 +76,8 @@ class TestWrite_fc_properties(TestCase):
                              field_scale=0,
                              field_is_nullable="True",
                              field_is_required="False",
-                             field_is_editable="True"
+                             field_is_editable="True",
+                             field_domain="some domain name"
                              )
                         )
 
@@ -115,7 +118,8 @@ class TestWrite_fc_properties(TestCase):
                                              "field_scale",
                                              "field_is_nullable",
                                              "field_is_required",
-                                             "field_is_editable"])
+                                             "field_is_editable",
+                                             "field_domain"])
 
         # create headings row
         heading_row = Row(field_name="Name",
@@ -127,7 +131,8 @@ class TestWrite_fc_properties(TestCase):
                           field_scale="Scale",
                           field_is_nullable="is nullable?",
                           field_is_required="is required?",
-                          field_is_editable="is editable?")
+                          field_is_editable="is editable?",
+                          field_domain="domain")
 
         # create a data row
         data_rows = []
@@ -140,7 +145,10 @@ class TestWrite_fc_properties(TestCase):
                              field_scale=0,
                              field_is_nullable="True",
                              field_is_required="False",
-                             field_is_editable="True"))
+                             field_is_editable="True",
+                             field_domain="some domain"
+                             )
+                         )
 
         fc_structure = (heading_row, data_rows)
 

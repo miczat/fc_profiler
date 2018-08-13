@@ -8,7 +8,6 @@ from fc_properties import is_m_enabled
 from fc_properties import get_fc_total_record_count
 from fc_properties import get_fc_field_count
 
-
 # self.assertEqual( <expected>, <actual>)
 
 fgdb = r"C:\tmp\fc_profiler_testdata\fc_profiler_test.gdb"
@@ -154,3 +153,4 @@ class TestGetFcFieldCount(TestCase):
         fc = "GDA94_all_field_types_polyline"
         fc_path = os.path.join(fgdb, fc)
         self.assertEquals(21, get_fc_field_count(fc_path))
+

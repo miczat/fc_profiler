@@ -100,6 +100,7 @@ def write_fc_profile(fc_property_data,
     sheet_fc_structure.col(8).width = 256 * 12   # is nullable
     sheet_fc_structure.col(9).width = 256 * 12   # is required
     sheet_fc_structure.col(10).width = 256 * 12  # is editable
+    sheet_fc_structure.col(11).width = 256 * 30  # domain
 
     # write title
     title = "Feature Class Structure"
@@ -130,6 +131,7 @@ def write_fc_profile(fc_property_data,
         sheet_fc_structure.write(row, col+7, record.field_is_nullable, data_style_aligned_centre)
         sheet_fc_structure.write(row, col+8, record.field_is_required, data_style_aligned_centre)
         sheet_fc_structure.write(row, col+9, record.field_is_editable, data_style_aligned_centre)
+        sheet_fc_structure.write(row, col+10, record.field_domain, data_style_aligned_left)
         row = row + 1
 
     # ----------------------------------

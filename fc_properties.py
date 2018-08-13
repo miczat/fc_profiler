@@ -255,7 +255,8 @@ def get_fc_structure(fc_path):
                                          "field_scale",
                                          "field_is_nullable",
                                          "field_is_required",
-                                         "field_is_editable"
+                                         "field_is_editable",
+                                         "field_domain"
                                          ]
                                  )
 
@@ -269,14 +270,14 @@ def get_fc_structure(fc_path):
                       field_scale="Scale",
                       field_is_nullable="is nullable?",
                       field_is_required="is required?",
-                      field_is_editable="is editable?"
+                      field_is_editable="is editable?",
+                      field_domain="Domain Name"
                       )
 
     log.debug('Getting structure from the feature class')
     data_rows = []
     field_list = arcpy.ListFields(dataset=fc_path, field_type="All")
     for field in field_list:
-        # TODO add default values, subtypes, domains
         data_rows.append(Row(field_name=field.baseName,
                              field_name_len=len(field.baseName),
                              field_alias=field.aliasName,
@@ -286,7 +287,8 @@ def get_fc_structure(fc_path):
                              field_scale=field.scale,
                              field_is_nullable=str(field.isNullable),
                              field_is_required=str(field.required),
-                             field_is_editable=str(field.editable)
+                             field_is_editable=str(field.editable),
+                             field_domain=field.domain
                              )
                          )
 

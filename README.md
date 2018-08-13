@@ -4,9 +4,9 @@ This is a data interrogation tool for use with Esri ArcGIS feature classes.
 
 Given an Esri ArcGIS feature class, **fc_profiler** will execute a suite of data profiling functions, outputting the results to an XLS file.
 
-<img src="https://www.lucidchart.com/publicSegments/view/bddbb18c-8487-4dcb-8c0f-ea99f4e2af49/image.png" height="320"/>
+<img src="https://www.lucidchart.com/publicSegments/view/52a427f0-4e52-4fa1-ad2b-0959850ed824/image.png" height="250"/>
 
-<img src="https://www.lucidchart.com/publicSegments/view/0db98fae-1ea8-4095-ad07-9b44d4889256/image.png" height="500"/>
+<img src="https://www.lucidchart.com/publicSegments/view/c1978f90-de70-44d9-9acd-432f42cc7ab3/image.png" height="300"/>
 
 &nbsp;
 
@@ -27,29 +27,25 @@ _implemented_
 
 _to do_
 
-* check for defined subtypes and domains    
-* for each field
-
-    * count of records with non-NULL or blank data
-    * percent of records with non-NULL or blank data
-    * count of records where each field 
-        * IS NULL
-        * value.strip() == ""
-        * 'no data' records (NULL + value.strip() == "")
-    * percent of records where 
-        * field value IS NULL
-        * value.strip() == ""
-        * 'no data' records (NULL plus "")
-    * what is the defined domain
-    * what is domain of the recorded data
-    * TOP 100 DISTINCT values ORDERED BY frequency DESC
-    * TOP 100 DISTINCT values ORDERED BY value ASC
-    * draw a histogram for numeric data
-    * draw a pie chart for categorical data 
-    * does it contain unicode?
-    * does it contain reserved characters (for Windows)?
-
-
+* subtypes     
+* count of records with non-NULL or blank data
+* percent of records with non-NULL or blank data
+* count of records where each field 
+    * IS NULL
+    * value.strip() == ""
+    * 'no data' records (NULL + value.strip() == "")
+* percent of records where 
+    * field value IS NULL
+    * value.strip() == ""
+    * 'no data' records (NULL plus "")
+* what is the defined domain
+* what is domain of the recorded data
+* TOP 100 DISTINCT values ORDERED BY frequency DESC
+* TOP 100 DISTINCT values ORDERED BY value ASC
+* draw a histogram for numeric data
+* draw a pie chart for categorical data 
+* does it contain unicode?
+* does it contain reserved characters (for Windows)?
 * port to, or make compatible with: 
     * ArcGIS Pro and Python 3.6.5 
     * ArcGIS 10.6.1 and Python 2.7.14
